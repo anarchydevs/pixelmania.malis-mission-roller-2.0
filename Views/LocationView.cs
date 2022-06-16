@@ -17,27 +17,33 @@ namespace MaliMissionRoller2
     {
         internal List<LocationViewEntry> Entries;
         internal View Root;
-        private Bounds Bounds;
+        private Bounds _bounds;
+        private Button _coords;
+        private Button _enableAll;
+        private Button _disableAll;
+
         private readonly int[] _pfIds = new int[] { 760, 585, 655, 550, 545, 505, 605, 800, 665, 590, 670, 595, 620, 685, 687, 717, 647, 791, 695, 625, 560, 696, 567, 566, 565, 540, 716, 705, 700, 710, 570, 630, 735, 740, 730, 610, 615, 635, 790, 795, 640, 646, 650, 600, 551, 586 };
 
         public LocationView(View root)
         {
             Entries = new List<LocationViewEntry>();
-            Bounds = new Bounds();
+            _bounds = new Bounds();
             Root = root;
 
             View _view = View.CreateFromXml($"{Main.PluginDir}\\UI\\Views\\LocationView.xml");
             _view.FindChild("ScrollListRoot", out View _scrollListRoot);
             _view.FindChild("Background", out BitmapView _background);
-            _view.FindChild("Remove", out Button _remove);
-            Extensions.ButtonSetGfx(_remove, 1000064);
-            _remove.Clicked = RemoveClick;
-
-            _view.FindChild("Bounds", out Button _bounds);
-            Extensions.ButtonSetGfx(_bounds, 1000061);
-            _bounds.Tag = true;
-            _bounds.Clicked = BoundsClick;
             _background.SetBitmap("LocationsBg");
+            _view.FindChild("Coords", out _coords);
+            _coords.Tag = 0;
+            _coords.Clicked = CoordsClick;
+            Extensions.ButtonSetGfx(_coords, 1000061);
+            _view.FindChild("EnableAll", out _enableAll);
+            _enableAll.Clicked = EnableAllClick;
+            Extensions.ButtonSetGfx(_enableAll, 1000072);
+            _view.FindChild("DisableAll", out _disableAll);
+            _disableAll.Clicked = DisableAllClick;
+            Extensions.ButtonSetGfx(_disableAll, 1000071);
 
             for (int i = 0; i < _pfIds.Length; i++)
             {
@@ -73,22 +79,25 @@ namespace MaliMissionRoller2
             Root.AddChild(_view, false);
         }
 
-        private void RemoveClick(object sender, ButtonBase e)
+        private void DisableAllClick(object sender, ButtonBase e)
         {
             Extensions.PlaySound(Main.Sounds.Click);
-            LocationViewEntry viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance).FirstOrDefault();
 
-            if (viewEntry != null && viewEntry.Coord1.Text != "")
+            foreach (LocationViewEntry viewEntry in Entries)
             {
-                viewEntry.Coord1.Text = "";
-                viewEntry.Coord2.Text = "";
-                Bounds = new Bounds();
-                viewEntry.Bounds = new Bounds();
-                Chat.WriteLine($"Roll bounds for {Playfield.Name} removed.");
+                viewEntry.Toggle.Tag = false;
+                Extensions.ButtonSetGfx(viewEntry.Toggle, 1000046);
             }
-            else
+        }
+
+        private void EnableAllClick(object sender, ButtonBase e)
+        {
+            Extensions.PlaySound(Main.Sounds.Click);
+
+            foreach (LocationViewEntry viewEntry in Entries)
             {
-                Chat.WriteLine("No bounds to remove.");
+                viewEntry.Toggle.Tag = true;
+                Extensions.ButtonSetGfx(viewEntry.Toggle, 1000036);
             }
         }
 
@@ -97,74 +106,103 @@ namespace MaliMissionRoller2
             LocationViewEntry viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance && x.Coord1.Text != "" && x.Coord2.Text != "").FirstOrDefault();
 
             if (viewEntry == null)
-                return;
-
-            Bounds.Coord1 = viewEntry.Bounds.Coord1;
-            Bounds.Coord2 = viewEntry.Bounds.Coord2;
-        }
-
-        private void BoundsClick(object sender, ButtonBase e)
-        {
-            Extensions.PlaySound(Main.Sounds.Click);
-            bool on = (bool)e.Tag;
-            Vector3 playerPos = DynelManager.LocalPlayer.Position;
-
-            if (on)
             {
-                Extensions.ButtonSetGfx((Button)e, 1000062);
-                Bounds.Coord1 = new Vector2(Convert.ToInt32(playerPos.X), Convert.ToInt32(playerPos.Z));
-
-                Chat.WriteLine($"Coordinate 1 set: {Bounds.Coord1}");
-                Bounds.Coord2 = new Vector2();
+                Extensions.ButtonSetGfx(_coords, 1000061);
+                _coords.Tag = 0;
+                _bounds = new Bounds();
             }
             else
             {
-                Extensions.ButtonSetGfx((Button)e, 1000061);
-                Bounds.Coord2 = new Vector2(Convert.ToInt32(playerPos.X), Convert.ToInt32(playerPos.Z));
-                Chat.WriteLine($"Coordinate 2 set: {Bounds.Coord2}");
-                Bounds.Reorder();
+                Extensions.ButtonSetGfx(_coords, 1000062);
+                _coords.Tag = 2;
 
-                LocationViewEntry viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance).FirstOrDefault();
-
-                if (viewEntry != null)
+                if (viewEntry.Bounds.Coord1.X != 0)
                 {
-                    viewEntry.Bounds.Coord1 = Bounds.Coord1;
-                    viewEntry.Bounds.Coord2 = Bounds.Coord2;
-                    viewEntry.Coord1.Text = Bounds.Coord1.ToString();
-                    viewEntry.Coord2.Text = Bounds.Coord2.ToString();
-
-                    Chat.WriteLine($"Roll bounds for {Playfield.Name} set.\nfrom: {Bounds.Coord1} to: {Bounds.Coord2}\n" +
-                        $"Warning: This will limit the roller search area for {Playfield.Name}");
-                }
-                else
-                {
-                    Chat.WriteLine("Invalid zone. Cannot set bounds here.");
+                    _bounds.Coord1 = viewEntry.Bounds.Coord1;
+                    _bounds.Coord2 = viewEntry.Bounds.Coord2;
                 }
             }
-
-
-            e.Tag = !on;
         }
+
+        private void CoordsClick(object sender, ButtonBase e)
+        {
+            Extensions.PlaySound(Main.Sounds.Click);
+            CoordsButtonState((int)e.Tag);
+            e.Tag = (int)e.Tag + 1;
+
+            if ((int)e.Tag == 3)
+                e.Tag = 0;
+        }
+
+        internal void CoordsButtonState(int state)
+        {
+            Vector3 playerPos = DynelManager.LocalPlayer.Position;
+            LocationViewEntry viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance).FirstOrDefault();
+
+            if (viewEntry == null)
+            {
+                Chat.WriteLine($"{Playfield.Name} is not a valid zone for setting coordinate bounds.");
+                return;
+            }
+            switch (state)
+            {
+                case 0:
+                    Extensions.ButtonSetGfx(_coords, 1000061);
+                    _bounds.Coord1 = new Vector2(Convert.ToInt32(playerPos.X), Convert.ToInt32(playerPos.Z));
+                    Chat.WriteLine($"Coordinate 1 set: {_bounds.Coord1}");
+                    _bounds.Coord2 = new Vector2();
+                    break;
+                case 1:
+                    Extensions.ButtonSetGfx(_coords, 1000062);
+                    _bounds.Coord2 = new Vector2(Convert.ToInt32(playerPos.X), Convert.ToInt32(playerPos.Z));
+                    Chat.WriteLine($"Coordinate 2 set: {_bounds.Coord2}");
+                    _bounds.Reorder();
+                    if (viewEntry != null)
+                    {
+                        viewEntry.Bounds.Coord1 = _bounds.Coord1;
+                        viewEntry.Bounds.Coord2 = _bounds.Coord2;
+                        viewEntry.Coord1.Text = _bounds.Coord1.ToString();
+                        viewEntry.Coord2.Text = _bounds.Coord2.ToString();
+
+                        Chat.WriteLine($"Coordinate roll bounds for {Playfield.Name} set.\nfrom: {_bounds.Coord1} to: {_bounds.Coord2}\n" +
+                            $"Warning: This will limit the roller search area for {Playfield.Name}");
+                    }
+                    break;
+                case 2:
+                    Extensions.ButtonSetGfx(_coords, 1000061);
+                    Extensions.PlaySound(Main.Sounds.Click);
+                    viewEntry.Coord1.Text = "";
+                    viewEntry.Coord2.Text = "";
+                    _bounds = new Bounds();
+                    viewEntry.Bounds = new Bounds();
+                    Chat.WriteLine($"Coordinate roll bounds for {Playfield.Name} removed.");
+                    break;
+                default:
+                    // code block
+                    break;
+            }
+        }
+
         internal void DrawBounds()
         {
-            if (Bounds.Coord1.X == 0)
+            if (_bounds.Coord1.X == 0)
                 return;
 
             Vector3 playerPos = DynelManager.LocalPlayer.Position;
 
-            if (Bounds.Coord2.X == 0)
+            if (_bounds.Coord2.X == 0)
             {
-                float xCoord = playerPos.X - Bounds.Coord1.X;
-                float yCoord = playerPos.Z - Bounds.Coord1.Y;
+                float xCoord = playerPos.X - _bounds.Coord1.X;
+                float yCoord = playerPos.Z - _bounds.Coord1.Y;
 
                 Debug.DrawLine(
-                    new Vector3(Bounds.Coord1.X, playerPos.Y, Bounds.Coord1.Y),
-                    new Vector3(Bounds.Coord1.X + xCoord, playerPos.Y, Bounds.Coord1.Y),
+                    new Vector3(_bounds.Coord1.X, playerPos.Y, _bounds.Coord1.Y),
+                    new Vector3(_bounds.Coord1.X + xCoord, playerPos.Y, _bounds.Coord1.Y),
                     DebuggingColor.Green);
 
                 Debug.DrawLine(
-                    new Vector3(Bounds.Coord1.X, playerPos.Y, Bounds.Coord1.Y),
-                    new Vector3(Bounds.Coord1.X, playerPos.Y, Bounds.Coord1.Y + yCoord),
+                    new Vector3(_bounds.Coord1.X, playerPos.Y, _bounds.Coord1.Y),
+                    new Vector3(_bounds.Coord1.X, playerPos.Y, _bounds.Coord1.Y + yCoord),
                     DebuggingColor.Green);
 
                 Debug.DrawLine(
@@ -179,27 +217,27 @@ namespace MaliMissionRoller2
             }
             else
             {
-                int xCoord = (int)(Bounds.Coord2.X - Bounds.Coord1.X);
-                int yCoord = (int)(Bounds.Coord2.Y - Bounds.Coord1.Y);
+                int xCoord = (int)(_bounds.Coord2.X - _bounds.Coord1.X);
+                int yCoord = (int)(_bounds.Coord2.Y - _bounds.Coord1.Y);
 
                 Debug.DrawLine(
-                    new Vector3(Bounds.Coord1.X, playerPos.Y, Bounds.Coord1.Y),
-                    new Vector3(Bounds.Coord1.X + xCoord, playerPos.Y, Bounds.Coord1.Y),
+                    new Vector3(_bounds.Coord1.X, playerPos.Y, _bounds.Coord1.Y),
+                    new Vector3(_bounds.Coord1.X + xCoord, playerPos.Y, _bounds.Coord1.Y),
                     DebuggingColor.Green);
 
                 Debug.DrawLine(
-                    new Vector3(Bounds.Coord1.X, playerPos.Y, Bounds.Coord1.Y),
-                    new Vector3(Bounds.Coord1.X, playerPos.Y, Bounds.Coord1.Y + yCoord),
+                    new Vector3(_bounds.Coord1.X, playerPos.Y, _bounds.Coord1.Y),
+                    new Vector3(_bounds.Coord1.X, playerPos.Y, _bounds.Coord1.Y + yCoord),
                     DebuggingColor.Green);
 
                 Debug.DrawLine(
-                    new Vector3(Bounds.Coord2.X, playerPos.Y, Bounds.Coord2.Y),
-                    new Vector3(Bounds.Coord2.X - xCoord, playerPos.Y, Bounds.Coord2.Y),
+                    new Vector3(_bounds.Coord2.X, playerPos.Y, _bounds.Coord2.Y),
+                    new Vector3(_bounds.Coord2.X - xCoord, playerPos.Y, _bounds.Coord2.Y),
                     DebuggingColor.Green);
 
                 Debug.DrawLine(
-                    new Vector3(Bounds.Coord2.X, playerPos.Y, Bounds.Coord2.Y),
-                    new Vector3(Bounds.Coord2.X, playerPos.Y, Bounds.Coord2.Y - yCoord),
+                    new Vector3(_bounds.Coord2.X, playerPos.Y, _bounds.Coord2.Y),
+                    new Vector3(_bounds.Coord2.X, playerPos.Y, _bounds.Coord2.Y - yCoord),
                     DebuggingColor.Green);
             }
         }

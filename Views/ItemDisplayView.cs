@@ -31,6 +31,7 @@ namespace MaliMissionRoller2
         public Button Rest;
         private string _cachedSearchText;
         private int _cachedDisplayItems;
+        private bool _inRollMode;
         private readonly Dictionary<Stat, string[]> ModTags = JsonConvert.DeserializeObject<Dictionary<Stat, string[]>>(File.ReadAllText($"{Main.PluginDir}\\JSON\\ModTags.json"));
         private readonly string defaultText;
 
@@ -74,13 +75,11 @@ namespace MaliMissionRoller2
             _searchBarNameInput.SetAlpha(0);
              _view.FindChild("BrowserMode", out BrowserMode);
             _view.FindChild("RollMode", out RollMode);
-            RollMode.Tag = BrowserMode;
             Extensions.ButtonSetGfx(RollMode, 1000036);
             RollMode.Clicked = RollModeClick;
-            BrowserMode.Tag = RollMode;
             Extensions.ButtonSetGfx(BrowserMode, 1000046);
             BrowserMode.Clicked = BrowserModeClick;
-
+            _inRollMode = true;
             //pregenerated views for browser entries
             FormatBrowserEntries();
             //loading saved rolllist
@@ -340,7 +339,7 @@ namespace MaliMissionRoller2
                 return;
             }
 
-            Chat.WriteLine($"New Roll List Entry:\n Name: {itemDb.Key.Name} QL: {itemDb.Key.HighQl}");
+            Chat.WriteLine($"New Roll List Entry:\n Name: {itemDb.Key.Name} QL: {ql}");
 
             RollEntryViewModel rollEntryModel = new RollEntryViewModel
             {
@@ -375,9 +374,12 @@ namespace MaliMissionRoller2
 
         private void BrowserModeClick(object sender, ButtonBase e)
         {
+            if (!_inRollMode)
+                return;
+
             Extensions.PlaySound(Main.Sounds.Click);
-            Extensions.ButtonSetGfx((Button)e, 1000036);
-            Extensions.ButtonSetGfx((Button)e.Tag, 1000046);
+            Extensions.ButtonSetGfx(BrowserMode, 1000036);
+            Extensions.ButtonSetGfx(RollMode, 1000046);
             _searchBarNameInput.ScaleTo(new Vector2(1, 1));
             _searchBarNameInput.SetAlpha(1);
             _searchBarModsInput.ScaleTo(new Vector2(1, 1));
@@ -385,6 +387,7 @@ namespace MaliMissionRoller2
             _dbRoot.SetAlpha(1);
             _dbRoot.LimitMaxSize(new Vector2(235, 15));
             _background.SetBitmap("SearchWindowBg");
+
             foreach (var item in RollEntryViews)
                 _scrollListRoot.RemoveChild(item.Root);
 
@@ -393,15 +396,18 @@ namespace MaliMissionRoller2
                 SearchQuery();
             }
 
+            _inRollMode = false;
             _scrollListRoot.FitToContents();
         }
 
         private void RollModeClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            if (_inRollMode)
+                return;
 
-            Extensions.ButtonSetGfx((Button)e, 1000036);
-            Extensions.ButtonSetGfx((Button)e.Tag, 1000046);
+            Extensions.PlaySound(Main.Sounds.Click);
+            Extensions.ButtonSetGfx(RollMode, 1000036);
+            Extensions.ButtonSetGfx(BrowserMode, 1000046);
             _searchBarNameInput.SetAlpha(0);
             _searchBarNameInput.ScaleTo(Vector2.Zero);
             _searchBarModsInput.ScaleTo(new Vector2(1, 1));
@@ -415,6 +421,7 @@ namespace MaliMissionRoller2
             foreach (var item in RollEntryViews)
                 _scrollListRoot.AddChild(item.Root, false);
 
+            _inRollMode = true;
             _scrollListRoot.FitToContents();
         }
 

@@ -40,10 +40,10 @@ namespace MaliMissionRoller2
 
         private void DevCmd(string[] param)
         {
-            string userInput = param[0].ToLower();
-
             if (param.Length < 2)
                 return;
+
+            string userInput = param[0].ToLower();
 
             if (!int.TryParse(param[1], out int result))
                 return;

@@ -208,6 +208,12 @@
     <Content Include="UI\Textures\036_DevButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="UI\Textures\037_DisableAllButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UI\Textures\038_EnableAllButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="UI\Views\LocationEntryView.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
