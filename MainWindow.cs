@@ -166,6 +166,8 @@ namespace MaliMissionRoller2
 
                 if (rollEntry == null)
                 {
+                    Extensions.PlaySound(Main.Sounds.Alert);
+
                     Chat.WriteLine("Remaining roll items outside characters level reach.\n" +
                         "If you think this is wrong, disable the 'Auto Adjust Level Slider'\n" +
                         "temporarily and contact me so I can update the mission level table!\n" +
@@ -279,7 +281,7 @@ namespace MaliMissionRoller2
             if (_isRolling && _requestTimer < 0)
             {
                 RequestMission();
-                _requestTimer = 0.9f;
+                _requestTimer = 1.5f;
             }
         }
 
