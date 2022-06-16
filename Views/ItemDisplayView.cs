@@ -164,6 +164,7 @@ namespace MaliMissionRoller2
             preview.AddChild(rollEntry.MultiListView, false);
 
             RollEntryViews.Add(rollEntry);
+            RollEntryViews = RollEntryViews.OrderBy(x => x.RollEntryModel.Ql).ToList();
         }
 
         private void RollEntryPlusClick(object sender, ButtonBase e)
@@ -416,7 +417,6 @@ namespace MaliMissionRoller2
             _dbRoot.LimitMaxSize(new Vector2(0, 15));
             _background.SetBitmap("SearchWindowBg2");
             DeleteBrowserEntries();
-            RollEntryViews.OrderBy(x => x.RollEntryModel.Ql);
 
             foreach (var item in RollEntryViews)
                 _scrollListRoot.AddChild(item.Root, false);
