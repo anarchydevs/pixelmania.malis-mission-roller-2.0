@@ -43,12 +43,10 @@ namespace MaliMissionRoller2
                 missionModel.Root.FindChild("Playfield", out missionModel.Playfield);
                 missionModel.Root.FindChild("Credits", out missionModel.Credits);
                 missionModel.Root.FindChild("Experience", out missionModel.Experience);
-
                 missionModel.MultiListView = ItemListViewBase.Create(new Rect(20, 20, 20, 20), 0, 0);
                 missionModel.MultiListView.SetGridIconSpacing(new Vector2(4, 4));
                 missionModel.MultiListView.SetGridIconSize(3);
                 missionModel.MultiListView.SetLayoutMode(0);
-
                 missionModel.Root.FindChild("Preview", out View preview);
                 preview.AddChild(missionModel.MultiListView, false);
 

@@ -1,20 +1,13 @@
-﻿using AOSharp.Common.GameData;
-using AOSharp.Common.GameData.UI;
-using AOSharp.Common.Helpers;
-using AOSharp.Common.Unmanaged.Imports;
-using AOSharp.Common.Unmanaged.Interfaces;
+﻿using AOSharp.Common.GameData.UI;
 using AOSharp.Core;
 using AOSharp.Core.Inventory;
-using AOSharp.Core.Misc;
 using AOSharp.Core.UI;
 using Newtonsoft.Json;
 using SmokeLounge.AOtomation.Messaging.GameData;
-using SmokeLounge.AOtomation.Messaging.Messages;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
 
 namespace MaliMissionRoller2
 {
@@ -255,7 +248,6 @@ namespace MaliMissionRoller2
                     continue;
                 }
 
-                Chat.WriteLine((bool)SettingsView.ExtraOptions.RemoveRoll.Tag);
                 SettingsView.ItemDisplay.UpdateRollEntry(rollEntry, (bool)SettingsView.ExtraOptions.RemoveRoll.Tag);
 
                 if ((bool)SettingsView.ExtraOptions.AutoAccept.Tag)

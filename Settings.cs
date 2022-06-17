@@ -1,21 +1,8 @@
 ﻿using AOSharp.Common.GameData;
-using AOSharp.Common.Helpers;
-using AOSharp.Common.Unmanaged.Imports;
-using AOSharp.Core;
-using AOSharp.Core.UI;
 using Newtonsoft.Json;
-using SmokeLounge.AOtomation.Messaging.GameData;
-using SmokeLounge.AOtomation.Messaging.Messages;
-using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace MaliMissionRoller2
 {
@@ -35,6 +22,7 @@ namespace MaliMissionRoller2
             public Bounds Bounds;
             public bool State;
         }
+
         public Settings()
         {
         }

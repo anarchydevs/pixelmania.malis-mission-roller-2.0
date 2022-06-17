@@ -17,7 +17,6 @@ namespace MaliMissionRoller2
     {
         public Window Window;
 
-
         public HelpWindow()
         {
             Window = Window.CreateFromXml("MaliMissionRollerHelp", $"{Main.PluginDir}\\UI\\Windows\\HelpWindow.xml", 
