@@ -1,15 +1,10 @@
 ﻿using AOSharp.Common.GameData;
-using AOSharp.Common.Unmanaged.DataTypes;
-using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core;
 using AOSharp.Core.UI;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace MaliMissionRoller2
 {
@@ -381,9 +376,9 @@ namespace MaliMissionRoller2
             Extensions.PlaySound(Main.Sounds.Click);
             Extensions.ButtonSetGfx(BrowserMode, 1000036);
             Extensions.ButtonSetGfx(RollMode, 1000046);
-            _searchBarNameInput.ScaleTo(new Vector2(1, 1));
+            _searchBarNameInput.LimitMaxSize(new Vector2(225, 14));
             _searchBarNameInput.SetAlpha(1);
-            _searchBarModsInput.ScaleTo(new Vector2(1, 1));
+            _searchBarModsInput.LimitMaxSize(new Vector2(225, 14));
             _searchBarModsInput.SetAlpha(1);
             _dbRoot.SetAlpha(1);
             _dbRoot.LimitMaxSize(new Vector2(235, 15));
@@ -410,8 +405,8 @@ namespace MaliMissionRoller2
             Extensions.ButtonSetGfx(RollMode, 1000036);
             Extensions.ButtonSetGfx(BrowserMode, 1000046);
             _searchBarNameInput.SetAlpha(0);
-            _searchBarNameInput.ScaleTo(Vector2.Zero);
-            _searchBarModsInput.ScaleTo(new Vector2(1, 1));
+            _searchBarNameInput.LimitMaxSize(new Vector2(0, 14));
+            _searchBarModsInput.LimitMaxSize(new Vector2(0, 14));
             _searchBarModsInput.SetAlpha(0);
             _dbRoot.SetAlpha(0);
             _dbRoot.LimitMaxSize(new Vector2(0, 15));

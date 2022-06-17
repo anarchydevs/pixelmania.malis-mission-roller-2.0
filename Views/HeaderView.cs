@@ -26,10 +26,9 @@ namespace MaliMissionRoller2
 
         public HeaderView(View root)
         {
-            _root = root;
-
             View _view = View.CreateFromXml($"{Main.PluginDir}\\UI\\Views\\HeaderView.xml");
 
+            _root = root;
             _view.FindChild("Title", out _title);
             _title.Text = "- Mali's Mission Roller 2.0 -";
             _view.FindChild("Icon", out _icon);
@@ -49,6 +48,7 @@ namespace MaliMissionRoller2
 
             _root.AddChild(_view, false);
         }
+
         internal void Hide()
         {
             _root.LimitMaxSize(new Vector2(0, 0));

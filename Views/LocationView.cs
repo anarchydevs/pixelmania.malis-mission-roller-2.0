@@ -21,9 +21,8 @@ namespace MaliMissionRoller2
         private Button _coords;
         private Button _enableAll;
         private Button _disableAll;
-
         private readonly int[] _pfIds = new int[] { 760, 585, 655, 550, 545, 505, 605, 800, 665, 590, 670, 595, 620, 685, 687, 717, 647, 791, 695, 625, 560, 696, 567, 566, 565, 540, 716, 705, 700, 710, 570, 630, 735, 740, 730, 610, 615, 635, 790, 795, 640, 646, 650, 600, 551, 586 };
-
+       
         public LocationView(View root)
         {
             Entries = new List<LocationViewEntry>();

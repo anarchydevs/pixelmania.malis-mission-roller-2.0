@@ -7,7 +7,6 @@ using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace MaliMissionRoller2
 {
