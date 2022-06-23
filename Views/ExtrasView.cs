@@ -49,8 +49,10 @@ namespace MaliMissionRoller2
         {
             Extensions.PlaySound(Main.Sounds.Click);
 
-            Chat.WriteLine("/mmr maxitems 'number' - change maximum browser display items\n" +
-                           "(Warning, higher numbers will increase lag while searching)", ChatColor.Green);
+            Chat.WriteLine("\n/mmr maxitems 'number' - change maximum browser display items\n" +
+                           "  (Warning, higher numbers will increase lag while searching)\n\n" +
+                           "/mmr shopvalue 'number' - change shop value (for accurate reward display)\n"+
+                           "  8 - omni trade shop\n  7 - clan/neut trade shop\n  6 - omni shop\n  4 - other shops", ChatColor.Green);
         }
 
         private void SetupChild(Button button, string settingsName)

@@ -15,7 +15,8 @@
     "StartHelp": true
   },
   "Dev": {
-    "MaxItems": 35
+    "MaxItems": 35,
+    "ShopValue": 4
   },
   "Sliders": {
     "EasyHard": 6.0,

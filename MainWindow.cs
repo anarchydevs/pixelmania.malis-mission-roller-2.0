@@ -1,4 +1,5 @@
-﻿using AOSharp.Common.GameData.UI;
+﻿using AOSharp.Common.GameData;
+using AOSharp.Common.GameData.UI;
 using AOSharp.Core;
 using AOSharp.Core.Inventory;
 using AOSharp.Core.UI;
@@ -156,28 +157,41 @@ namespace MaliMissionRoller2
                     .FirstOrDefault(entry => MissionLvls[DynelManager.LocalPlayer.Level - 1]
                     .Any(missionRange => entry.RollEntryModel.Ql - missionRange == 0 || new[] { "Nano Crystal", "NanoCrystal" }.Any(entry.RollEntryModel.Name.Contains) && Math.Abs(entry.RollEntryModel.Ql - missionRange) <= 10));
 
-
                 if (rollEntry == null)
                 {
-                    Extensions.PlaySound(Main.Sounds.Alert);
 
-                    Chat.WriteLine("Remaining roll items outside characters level reach.\n" +
-                        "If you think this is wrong, disable the 'Auto Adjust Level Slider'\n" +
-                        "temporarily and contact me so I can update the mission level table!\n" +
-                        "(press '?' in the top right corner for contact details)");
+                    rollEntry = SettingsView.ItemDisplay.RollEntryViews.FirstOrDefault(x => x.RollEntryModel.LowId == 297315);
 
-                    _isRolling = false;
-                    return;
+                    if (rollEntry == null)
+                    {
+                        Extensions.PlaySound(Main.Sounds.Alert);
+
+                        Chat.WriteLine("Remaining roll items outside characters level reach.\n" +
+                            "If you think this is wrong, disable the 'Auto Adjust Level Slider'\n" +
+                            "temporarily and contact me so I can update the mission level table!\n" +
+                            "(press '?' in the top right corner for contact details)");
+
+                        _isRolling = false;
+                        return;
+                    }
                 }
 
-                _missionLevel = MissionLvls[DynelManager.LocalPlayer.Level - 1].OrderBy(x => Math.Abs(x - rollEntry.RollEntryModel.Ql)).FirstOrDefault();
-                int count = SettingsView.ItemDisplay.RollEntryViews
-                    .Count(y => Math.Abs(_missionLevel - y.RollEntryModel.Ql) <= 10 && new[] { "Nano Crystal", "NanoCrystal" }
-                    .Any(y.RollEntryModel.Name.Contains) ||
-                    _missionLevel - y.RollEntryModel.Ql == 0);
+                if (rollEntry.RollEntryModel.LowId != 297315)
+                {
+                    _missionLevel = MissionLvls[DynelManager.LocalPlayer.Level - 1].OrderBy(x => Math.Abs(x - rollEntry.RollEntryModel.Ql)).FirstOrDefault();
+                    int count = SettingsView.ItemDisplay.RollEntryViews
+                        .Count(y => Math.Abs(_missionLevel - y.RollEntryModel.Ql) <= 10 && new[] { "Nano Crystal", "NanoCrystal" }
+                        .Any(y.RollEntryModel.Name.Contains) ||
+                        _missionLevel - y.RollEntryModel.Ql == 0);
 
-                SettingsView.Sliders.EasyHard.Value = MissionLvls[DynelManager.LocalPlayer.Level - 1].IndexOf(_missionLevel) + 1;
-                Chat.WriteLine($"Mission level set to: {_missionLevel}\nItems to roll in this range: {count}");
+                    SettingsView.Sliders.EasyHard.Value = MissionLvls[DynelManager.LocalPlayer.Level - 1].IndexOf(_missionLevel) + 1;
+
+                    Chat.WriteLine($"Mission level set to: {_missionLevel}\nItems to roll in this range: {count}");
+                }
+                else
+                {
+                    Chat.WriteLine($"Rolling for Mission Combined Credit Reward >= {rollEntry.RollEntryModel.Ql}");
+                }
             }
 
             MissionSliders sliders = SettingsView.Sliders.GetSliderValues();
@@ -195,19 +209,24 @@ namespace MaliMissionRoller2
         internal void RollMatchCheck(MissionInfo[] rollList)
         {
             MissionView.Update(rollList);
-
+            int missionIndex = -1;
             foreach (MissionInfo missionInfo in rollList)
             {
-
                 RollEntryView rollEntry = SettingsView.ItemDisplay.RollEntryViews
                     .Where(b => missionInfo.MissionItemData.Any(a => a.HighId == b.RollEntryModel.HighId && a.Ql == b.RollEntryModel.Ql) ||
                                 missionInfo.Description.Contains(b.RollEntryModel.Name) && new[] { "Nano Crystal", "NanoCrystal" }.Any(b.RollEntryModel.Name.Contains) ||
                                 missionInfo.Description.Contains(b.RollEntryModel.Name) && b.RollEntryModel.Ql == _missionLevel)
                     .FirstOrDefault();
 
+                missionIndex++;
 
                 if (rollEntry == null)
-                    continue;
+                {
+                    rollEntry = SettingsView.ItemDisplay.RollEntryViews.FirstOrDefault(x => x.RollEntryModel.LowId == 297315);
+
+                    if (rollEntry == null || rollEntry.RollEntryModel.Ql > MissionView.CombinedItemValue[missionIndex])
+                        continue;
+                }
 
                 if (!(bool)SettingsView.MissionTypes.ReturnItem.Tag && missionInfo.MissionIcon == 11329)
                 {
@@ -252,6 +271,7 @@ namespace MaliMissionRoller2
 
                 if ((bool)SettingsView.ExtraOptions.AutoAccept.Tag)
                 {
+                    Chat.WriteLine($"{rollEntry.RollEntryModel.Ql} {MissionView.CombinedItemValue[missionIndex]}");
                     MissionView.AcceptMission(missionInfo.MissionIdentity, (bool)SettingsView.ExtraOptions.PlayAlertSound.Tag);
                 }
                 else
@@ -259,6 +279,7 @@ namespace MaliMissionRoller2
                     _isRolling = false;
                     Chat.WriteLine($"Match found! {rollEntry.RollEntryModel.Name} (Auto Accept turned off)");
                 }
+                return;
             }
             _requestTimer = 0.9f;
         }
