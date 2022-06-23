@@ -20,7 +20,8 @@ namespace MaliMissionRoller2
         private List<MissionModel> _missionViews;
         private const float _maxDistanceToTerminal = 7.480928f;
         private const float _numOfMissions = 5;
-
+        internal double ShopValue;
+        internal int[] CombinedItemValue;
         public MissionView(View root)
         {
             _missionViews = new List<MissionModel>();
@@ -113,6 +114,8 @@ namespace MaliMissionRoller2
 
         internal void Update(MissionInfo[] rollList)
         {
+            CombinedItemValue = new int[5];
+
             for (int i = 0; i < 5; i++)
             {
                 MissionItemData[] itemData = rollList[i].MissionItemData;
@@ -120,7 +123,6 @@ namespace MaliMissionRoller2
                 _missionViews[i].Icon.SetBitmap(rollList[i].MissionIcon.ToString());
                 _missionViews[i].Title.Text = rollList[i].Title.Length > 25 ? rollList[i].Title.Substring(0, 25).ToUpper() : rollList[i].Title.ToUpper();
                 _missionViews[i].Playfield.Text = Utils.UnsafePointerToString(N3InterfaceModule_t.GetPFName(rollList[i].Playfield.Instance));
-                _missionViews[i].Credits.Text = rollList[i].Credits.ToString();
                 _missionViews[i].Experience.Text = rollList[i].XpReward.ToString();
                 _missionViews[i].Accept.Tag = rollList[i].MissionIdentity;
                 _missionViews[i].Ping.Tag = rollList[i].MissionIdentity;
@@ -129,6 +131,7 @@ namespace MaliMissionRoller2
                 {
                     if (DummyItem.CreateDummyItemID(itemData[e].LowId, itemData[e].HighId, itemData[e].Ql, out Identity dummyItemId))
                     {
+                        CombinedItemValue[i] += (int)(ShopValue * Extensions.GetItemValue(dummyItemId));
                         if (_missionViews[i].MultiListViewItem[e] != null)
                             _missionViews[i].MultiListView.RemoveItem(_missionViews[i].MultiListViewItem[e]);
 
@@ -136,6 +139,10 @@ namespace MaliMissionRoller2
                         _missionViews[i].MultiListView.AddItem(_missionViews[i].MultiListView.GetFirstFreePos(), _missionViews[i].MultiListViewItem[e], true);
                     }
                 }
+
+                CombinedItemValue[i] += rollList[i].Credits;
+                _missionViews[i].Credits.Text = $"{rollList[i].Credits} ({CombinedItemValue[i]})";
+
             }
 
             MissionViewSetAlpha(1);

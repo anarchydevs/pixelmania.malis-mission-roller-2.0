@@ -36,7 +36,6 @@ namespace MaliMissionRoller2
             Extensions.PlaySound(Sounds.Alert);
             Chat.RegisterCommand("mmr", (string command, string[] param, ChatWindow chatWindow) => DevCmd(param));
         }
-
         private void DevCmd(string[] param)
         {
             if (param.Length < 2)
@@ -54,6 +53,10 @@ namespace MaliMissionRoller2
                     _window.SettingsView.ItemDisplay.DeleteBrowserEntries();
                     _window.SettingsView.ItemDisplay.FormatBrowserEntries();
                     Chat.WriteLine($"Max Display items set to: {Settings.Dev["MaxItems"]}",ChatColor.Red);
+                    break;
+                case "shopvalue":
+                    Settings.Dev["ShopValue"] = result;
+                    Chat.WriteLine($"Shop Value Factor set to: {Settings.Dev["ShopValue"]}", ChatColor.Red);
                     break;
             }
         }
@@ -73,6 +76,7 @@ namespace MaliMissionRoller2
                 return;
 
             MainWindow.CurrentTerminal = new MissionTerminal(DynelManager.GetDynel(((GenericCmdMessage)n3Msg).Target));
+            _window.MissionView.ShopValue = Math.Round(Settings.Dev["ShopValue"] * (1 + (float)DynelManager.LocalPlayer.GetStat(Stat.ComputerLiteracy) / (40 * 100)) / 100, 3);
             _window.SwapViews();
         }
 

@@ -118,10 +118,14 @@ namespace MaliMissionRoller2
                 _browserEntryViews.Add(itemView);
             }
         }
-        private void FormatRollEntry(RollEntryViewModel rollEntryModel)
+        private void FormatRollEntry(RollEntryViewModel rollEntryModel,bool newEntry = false)
         {
             RollEntryView rollEntry = new RollEntryView();
             rollEntry.RollEntryModel = rollEntryModel;
+
+            if (newEntry)
+                rollEntryModel.Count = 1;
+
             rollEntry.Root = View.CreateFromXml($"{Main.PluginDir}\\UI\\Views\\RollEntryView.xml");
             rollEntry.Root.FindChild("Name", out rollEntry.Name);
             rollEntry.Root.FindChild("Bitmap", out rollEntry.Bitmap);
@@ -325,7 +329,17 @@ namespace MaliMissionRoller2
 
             int ql;
 
-            if (itemDb.Key.LowQl == itemDb.Key.HighQl)
+            if (itemDb.Key.LowId == 297315)
+            {
+                if (!int.TryParse(textInput, out ql))
+                {
+                    Chat.WriteLine($"Please provide a reward value.", ChatColor.Red);
+                    return;
+                }
+                else
+                    Chat.WriteLine($"New Roll List Entry:\n Rolling Missions with Credits Value >= {ql}");
+            }
+            else if (itemDb.Key.LowQl == itemDb.Key.HighQl)
             {
                 ql = itemDb.Key.LowQl;
             }
@@ -335,7 +349,8 @@ namespace MaliMissionRoller2
                 return;
             }
 
-            Chat.WriteLine($"New Roll List Entry:\n Name: {itemDb.Key.Name} QL: {ql}");
+            if (itemDb.Key.LowId != 297315)
+                Chat.WriteLine($"New Roll List Entry:\n Name: {itemDb.Key.Name} QL: {ql}");
 
             RollEntryViewModel rollEntryModel = new RollEntryViewModel
             {
@@ -357,7 +372,7 @@ namespace MaliMissionRoller2
 
             if (rollListEntry == null)
             {
-                FormatRollEntry(rollEntryModel);
+                FormatRollEntry(rollEntryModel, true);
             }
             else
             {
