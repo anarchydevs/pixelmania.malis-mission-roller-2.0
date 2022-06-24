@@ -80,7 +80,7 @@ namespace MaliMissionRoller2
 
         private void DisableAllClick(object sender, ButtonBase e)
         {
-            Main.Sounds.Click.Play();
+            Midi.Play("Click");
             foreach (LocationViewEntry viewEntry in Entries)
             {
                 viewEntry.Toggle.Tag = false;
@@ -90,7 +90,7 @@ namespace MaliMissionRoller2
 
         private void EnableAllClick(object sender, ButtonBase e)
         {
-            Main.Sounds.Click.Play();
+            Midi.Play("Click");
             foreach (LocationViewEntry viewEntry in Entries)
             {
                 viewEntry.Toggle.Tag = true;
@@ -123,7 +123,7 @@ namespace MaliMissionRoller2
 
         private void CoordsClick(object sender, ButtonBase e)
         {
-            Main.Sounds.Click.Play();
+            Midi.Play("Click");
             CoordsButtonState((int)e.Tag);
             e.Tag = (int)e.Tag + 1;
 
@@ -167,7 +167,7 @@ namespace MaliMissionRoller2
                     break;
                 case 2:
                     Extensions.ButtonSetGfx(_coords, 1000061);
-                    Main.Sounds.Click.Play(); viewEntry.Coord1.Text = "";
+                    Midi.Play("Click"); viewEntry.Coord1.Text = "";
                     viewEntry.Coord2.Text = "";
                     _bounds = new Bounds();
                     viewEntry.Bounds = new Bounds();
@@ -239,7 +239,7 @@ namespace MaliMissionRoller2
         }
         private void LocationClick(object sender, ButtonBase e)
         {
-            Main.Sounds.Click.Play();
+            Midi.Play("Click");
 
             bool on = (bool)e.Tag;
 

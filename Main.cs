@@ -14,7 +14,6 @@ namespace MaliMissionRoller2
     {
         public static string PluginDir;
         private MainWindow _window;
-        public static Sounds Sounds;
         public static Settings Settings;
         public static List<KeyValuePair<ItemInfo, List<Stat>>> ItemDb;
 
@@ -25,24 +24,22 @@ namespace MaliMissionRoller2
             PluginDir = pluginDir;
             Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText($"{pluginDir}\\JSON\\Settings.json"));
             Extensions.FormatItemDb(Settings.Database["Implants"], Settings.Database["Clusters"], Settings.Database["Nanos"], Settings.Database["Rest"]);
+            
             _window = new MainWindow("MaliMissionRoller", $"{pluginDir}\\UI\\Windows\\MainWindow.xml");
             _window.Show();
             _window.Window.MoveTo(Settings.Frame.X, Settings.Frame.Y);
+           
             Game.OnUpdate += Update;
             Mission.RollListChanged += RollListChanged;
             Network.N3MessageSent += N3Message_Sent;
             Game.TeleportEnded += Game_OnTeleportEnded;
-            Sounds = new Sounds();
 
-            Midi.PlayMidi("Alert");
-
-        //    Extensions.PlaySound(Sounds.Alert);
+            Midi.Play("Alert");
             Chat.RegisterCommand("mmr", (string command, string[] param, ChatWindow chatWindow) => DevCmd(param));
         }
         private void DevCmd(string[] param)
         {
 
-            Chat.WriteLine(Midi.playingMidi.Count);
             if (param.Length < 2)
                 return;
 

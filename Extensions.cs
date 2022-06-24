@@ -25,11 +25,10 @@ namespace MaliMissionRoller2
             button.SetGfx(ButtonState.Pressed, gfxId);
         }
 
-        public static void PlaySound(SoundPlayer media)
+        public static string GetZoneName(int id)
         {
-            media.Play();
+           return Utils.UnsafePointerToString(N3InterfaceModule_t.GetPFName(id));
         }
-
         public static void LoadCustomTextures(string path, int startId)
         {
             DirectoryInfo textureDir = new DirectoryInfo(path);
@@ -47,6 +46,7 @@ namespace MaliMissionRoller2
             IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, itemIdentity, ref none);
             return DummyItem_t.GetStat(pItem, Stat.Value, 4);
         }
+
         public static unsafe string GetItemName(int lowId, int highId, int ql)
         {
             Identity none = Identity.None;
@@ -81,8 +81,9 @@ namespace MaliMissionRoller2
                     File.ReadAllText($"{Main.PluginDir}\\JSON\\ItemDb_Rest.json")));
 
             Main.ItemDb = Main.ItemDb.OrderBy(x => x.Key.Name).ToList();
+            
             if (showItemCount)
-            Chat.WriteLine($"Items loaded: {Main.ItemDb.Count}");
+                Chat.WriteLine($"Items loaded: {Main.ItemDb.Count}");
         }
     }
 
@@ -94,18 +95,6 @@ namespace MaliMissionRoller2
 
         [FieldOffset(0x9C)]
         public IntPtr Name;
-    }
-
-    public class Sounds
-    {
-        public SoundPlayer Click;
-        public SoundPlayer Alert;
-
-        public Sounds()
-        {
-           Click = new SoundPlayer($"{Main.PluginDir}\\Sound\\Click.wav");
-           Alert = new SoundPlayer($"{Main.PluginDir}\\Sound\\Alert.wav");
-        }
     }
 
     public class ItemInfo

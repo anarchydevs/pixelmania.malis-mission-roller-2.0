@@ -15,7 +15,7 @@ namespace MaliMissionRoller2
         public static Dictionary<string, bool> playingMidi = new Dictionary<string, bool>();
         private static bool _tearDown = false;
 
-        public static void PlayMidi(string fileName)
+        public static void Play(string fileName)
         {
             Random rnd = new Random();
             string alias = $"{fileName}_{rnd.Next()}";

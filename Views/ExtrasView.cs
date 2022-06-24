@@ -47,7 +47,7 @@ namespace MaliMissionRoller2
 
         private void DevClick(object sender, ButtonBase e)
         {
-            Main.Sounds.Click.Play();
+            Midi.Play("Click");
             Chat.WriteLine("\n/mmr maxitems 'number' - change maximum browser display items\n" +
                            "  (Warning, higher numbers will increase lag while searching)\n\n" +
                            "/mmr shopvalue 'number' - change shop value (for accurate reward display)\n"+
@@ -68,7 +68,7 @@ namespace MaliMissionRoller2
 
         private void ExtrasClick(object sender, ButtonBase e)
         {
-            Main.Sounds.Click.Play();
+            Midi.Play("Click");
             bool on = (bool)e.Tag;
 
             if (!on)
