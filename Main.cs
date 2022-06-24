@@ -26,9 +26,9 @@ namespace MaliMissionRoller2
             Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText($"{pluginDir}\\JSON\\Settings.json"));
             Extensions.FormatItemDb(Settings.Database["Implants"], Settings.Database["Clusters"], Settings.Database["Nanos"], Settings.Database["Rest"]);
             _window = new MainWindow("MaliMissionRoller", $"{pluginDir}\\UI\\Windows\\MainWindow.xml");
-            _window.Show();
-         //   _window.Window.MoveTo(Settings.Frame.X, Settings.Frame.Y);
-            Game.OnUpdate += Update;
+            //_window.Show();
+            //_window.Window.MoveTo(Settings.Frame.X, Settings.Frame.Y);
+            //Game.OnUpdate += Update;
             Mission.RollListChanged += RollListChanged;
             Network.N3MessageSent += N3Message_Sent;
             Game.TeleportEnded += Game_OnTeleportEnded;
