@@ -34,6 +34,7 @@ namespace MaliMissionRoller2
             try
             {
                 HelpWindow _helpWindow = new HelpWindow();
+
                 if (Window.FindView("HeaderRoot", out View headerRoot))
                 {
                     InSettings = false;
@@ -68,21 +69,23 @@ namespace MaliMissionRoller2
 
         private void HelpClick(object sender, ButtonBase e)
         {
+            Midi.Play("Click");
+
             HelpWindow helpWindow = new HelpWindow();
             helpWindow.Window.Show(true);
         }
 
         private void StartClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
 
             _isRolling = !_isRolling;
-            Chat.WriteLine($"Rolling set to: {_isRolling.ToString().ToUpper()}");
+            Chat.WriteLine($"Auto Rolling Toggled.");
         }
 
         private void SettingsClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
 
             if (InSettings)
             {
@@ -101,7 +104,7 @@ namespace MaliMissionRoller2
 
         public void SwapViews()
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
 
             if (InSettings)
             {
@@ -119,7 +122,8 @@ namespace MaliMissionRoller2
 
         private void RequestClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
+
             SwapViews();
             RequestMission();
         }
@@ -128,7 +132,7 @@ namespace MaliMissionRoller2
         {
             if (CurrentTerminal == null)
             {
-                Chat.WriteLine("Invalid terminal.");
+                Chat.WriteLine("Invalid terminal. (right click or use a mission terminal)");
                 _isRolling = false;
                 return;
             }
@@ -146,7 +150,7 @@ namespace MaliMissionRoller2
             {
                 _isRolling = false;
                 Chat.WriteLine("Roll List is empty!");
-                Chat.WriteLine("Rolling set to: FALSE");
+                Chat.WriteLine("Auto Rolling set to: FALSE");
                 return;
             }
 
@@ -164,7 +168,7 @@ namespace MaliMissionRoller2
 
                     if (rollEntry == null)
                     {
-                        Extensions.PlaySound(Main.Sounds.Alert);
+                        Midi.Play("Alert");
 
                         Chat.WriteLine("Remaining roll items outside characters level reach.\n" +
                             "If you think this is wrong, disable the 'Auto Adjust Level Slider'\n" +
@@ -186,11 +190,11 @@ namespace MaliMissionRoller2
 
                     SettingsView.Sliders.EasyHard.Value = MissionLvls[DynelManager.LocalPlayer.Level - 1].IndexOf(_missionLevel) + 1;
 
-                    Chat.WriteLine($"Mission level set to: {_missionLevel}\nItems to roll in this range: {count}");
+                    Chat.WriteLine($"Mission level set to: {_missionLevel}\n Unique items to roll in this range: {count}");
                 }
                 else
                 {
-                    Chat.WriteLine($"Rolling for Mission Combined Credit Reward >= {rollEntry.RollEntryModel.Ql}");
+                    Chat.WriteLine($"Rolling for missions with combined credit reward >= {rollEntry.RollEntryModel.Ql}");
                 }
             }
 
@@ -227,30 +231,29 @@ namespace MaliMissionRoller2
                     if (rollEntry == null || rollEntry.RollEntryModel.Ql > MissionView.CombinedItemValue[missionIndex])
                         continue;
                 }
-
                 if (!(bool)SettingsView.MissionTypes.ReturnItem.Tag && missionInfo.MissionIcon == 11329)
                 {
-                    Chat.WriteLine($"Skipping {rollEntry.RollEntryModel.Name} (Return Item disabled)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to 'Return Item' being disabled.");
                     continue;
                 }
                 if (!(bool)SettingsView.MissionTypes.KillTarget.Tag && missionInfo.MissionIcon == 11330)
                 {
-                    Chat.WriteLine($"Skipping {rollEntry.RollEntryModel.Name} (Kill Target disabled)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to 'Kill Target' being disabled.");
                     continue;
                 }
                 if (!(bool)SettingsView.MissionTypes.FindTarget.Tag && missionInfo.MissionIcon == 11335)
                 {
-                    Chat.WriteLine($"Skipping {rollEntry.RollEntryModel.Name} (Find Target disabled)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to 'Find Target' being disabled.");
                     continue;
                 }
                 if (!(bool)SettingsView.MissionTypes.FindItem.Tag && missionInfo.MissionIcon == 11337)
                 {
-                    Chat.WriteLine($"Skipping {rollEntry.RollEntryModel.Name} (Find Item disabled)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to 'Find Item' being disabled.");
                     continue;
                 }
                 if (!(bool)SettingsView.MissionTypes.UseItem.Tag && missionInfo.MissionIcon == 11342)
                 {
-                    Chat.WriteLine($"Skipping {rollEntry.RollEntryModel.Name} (Use Item disabled)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to 'Use Item' being disabled.");
                     continue;
                 }
 
@@ -258,12 +261,12 @@ namespace MaliMissionRoller2
 
                 if (locEntry == null)
                 {
-                    Chat.WriteLine($"Skipping {rollEntry.RollEntryModel.Name} (Location turned off)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to '{Extensions.GetZoneName(missionInfo.Playfield.Instance)}' being disabled.");
                     continue;
                 }
                 if (locEntry.Bounds.Coord1.X != 0 && locEntry.Bounds.Coord2.X != 0 && !locEntry.Bounds.Contains(missionInfo.Location))
                 {
-                    Chat.WriteLine($"Skipping {rollEntry.RollEntryModel.Name} (Location out of bounds)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to mission location in '{Extensions.GetZoneName(missionInfo.Playfield.Instance)}' being out of set bounds.");
                     continue;
                 }
 
@@ -271,13 +274,12 @@ namespace MaliMissionRoller2
 
                 if ((bool)SettingsView.ExtraOptions.AutoAccept.Tag)
                 {
-                    Chat.WriteLine($"{rollEntry.RollEntryModel.Ql} {MissionView.CombinedItemValue[missionIndex]}");
                     MissionView.AcceptMission(missionInfo.MissionIdentity, (bool)SettingsView.ExtraOptions.PlayAlertSound.Tag);
                 }
                 else
                 {
                     _isRolling = false;
-                    Chat.WriteLine($"Match found! {rollEntry.RollEntryModel.Name} (Auto Accept turned off)");
+                    Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', due to 'Auto Accept' being disabled, waiting for user input.");
                 }
                 return;
             }

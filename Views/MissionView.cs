@@ -1,16 +1,9 @@
 ﻿using AOSharp.Common.GameData;
-using AOSharp.Common.GameData.UI;
-using AOSharp.Common.Helpers;
-using AOSharp.Common.Unmanaged.Imports;
-using AOSharp.Common.Unmanaged.Interfaces;
 using AOSharp.Core;
 using AOSharp.Core.UI;
 using SmokeLounge.AOtomation.Messaging.GameData;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace MaliMissionRoller2
 {
@@ -60,7 +53,7 @@ namespace MaliMissionRoller2
 
         private void PingClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
 
             if (e.Tag == null)
                 return;
@@ -70,7 +63,7 @@ namespace MaliMissionRoller2
 
         private void AcceptClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
 
             if (e.Tag == null)
                 return;
@@ -82,7 +75,7 @@ namespace MaliMissionRoller2
         internal void AcceptMission(Identity identity, bool playSound = true)
         {
             if (playSound)
-                Extensions.PlaySound(Main.Sounds.Alert);
+                Midi.Play("Alert");
 
             Network.Send(new CreateQuestMessage()
             {
@@ -122,7 +115,7 @@ namespace MaliMissionRoller2
 
                 _missionViews[i].Icon.SetBitmap(rollList[i].MissionIcon.ToString());
                 _missionViews[i].Title.Text = rollList[i].Title.Length > 25 ? rollList[i].Title.Substring(0, 25).ToUpper() : rollList[i].Title.ToUpper();
-                _missionViews[i].Playfield.Text = Utils.UnsafePointerToString(N3InterfaceModule_t.GetPFName(rollList[i].Playfield.Instance));
+                _missionViews[i].Playfield.Text = Extensions.GetZoneName(rollList[i].Playfield.Instance);
                 _missionViews[i].Experience.Text = rollList[i].XpReward.ToString();
                 _missionViews[i].Accept.Tag = rollList[i].MissionIdentity;
                 _missionViews[i].Ping.Tag = rollList[i].MissionIdentity;

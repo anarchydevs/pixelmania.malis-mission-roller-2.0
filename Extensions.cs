@@ -1,21 +1,17 @@
 ﻿using AOSharp.Common.GameData;
 using AOSharp.Common.GameData.UI;
 using AOSharp.Common.Helpers;
-using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.Interfaces;
 using AOSharp.Core;
-using AOSharp.Core.Inventory;
 using AOSharp.Core.UI;
 using Newtonsoft.Json;
-using SmokeLounge.AOtomation.Messaging.GameData;
-using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Media;
 
 namespace MaliMissionRoller2
@@ -29,12 +25,10 @@ namespace MaliMissionRoller2
             button.SetGfx(ButtonState.Pressed, gfxId);
         }
 
-        public static void PlaySound(MediaPlayer media)
+        public static string GetZoneName(int id)
         {
-            media.Position = TimeSpan.Zero;
-            media.Play();
+           return Utils.UnsafePointerToString(N3InterfaceModule_t.GetPFName(id));
         }
-
         public static void LoadCustomTextures(string path, int startId)
         {
             DirectoryInfo textureDir = new DirectoryInfo(path);
@@ -52,6 +46,7 @@ namespace MaliMissionRoller2
             IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, itemIdentity, ref none);
             return DummyItem_t.GetStat(pItem, Stat.Value, 4);
         }
+
         public static unsafe string GetItemName(int lowId, int highId, int ql)
         {
             Identity none = Identity.None;
@@ -86,8 +81,9 @@ namespace MaliMissionRoller2
                     File.ReadAllText($"{Main.PluginDir}\\JSON\\ItemDb_Rest.json")));
 
             Main.ItemDb = Main.ItemDb.OrderBy(x => x.Key.Name).ToList();
+            
             if (showItemCount)
-            Chat.WriteLine($"Items loaded: {Main.ItemDb.Count}");
+                Chat.WriteLine($"Items loaded: {Main.ItemDb.Count}");
         }
     }
 
@@ -99,22 +95,6 @@ namespace MaliMissionRoller2
 
         [FieldOffset(0x9C)]
         public IntPtr Name;
-    }
-
-    public class Sounds
-    {
-        public MediaPlayer Click;
-        public MediaPlayer Alert;
-
-        public Sounds()
-        {
-            Click = new MediaPlayer();
-            Click.Open(new Uri($"{Main.PluginDir}\\Sound\\Click.mp3"));
-            Click.Volume = 0.5f;
-            Alert = new MediaPlayer();
-            Alert.Open(new Uri($"{Main.PluginDir}\\Sound\\Alert.mp3"));
-            Alert.Volume = 0.1f;
-        }
     }
 
     public class ItemInfo

@@ -168,8 +168,7 @@ namespace MaliMissionRoller2
 
         private void RollEntryPlusClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
-
+            Midi.Play("Click");
             RollEntryView rollEntryView = (RollEntryView)e.Tag;
 
             rollEntryView.RollEntryModel.Count += 1;
@@ -178,8 +177,7 @@ namespace MaliMissionRoller2
 
         private void RollEntryMinusClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
-
+            Midi.Play("Click");
             RollEntryView rollEntryView = (RollEntryView)e.Tag;
 
             UpdateRollEntry(rollEntryView);
@@ -321,8 +319,7 @@ namespace MaliMissionRoller2
 
         private void BrowserEntryClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
-
+            Midi.Play("Click");
             BrowserEntryViewModel browserEntryModel = (BrowserEntryViewModel)e.Tag;
             KeyValuePair<ItemInfo, List<Stat>> itemDb = browserEntryModel.ItemDb;
             string textInput = browserEntryModel.Ql.Text == "" ? "0" : browserEntryModel.Ql.Text;
@@ -388,7 +385,7 @@ namespace MaliMissionRoller2
             if (!_inRollMode)
                 return;
 
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
             Extensions.ButtonSetGfx(BrowserMode, 1000036);
             Extensions.ButtonSetGfx(RollMode, 1000046);
             _searchBarNameInput.LimitMaxSize(new Vector2(225, 14));
@@ -416,7 +413,7 @@ namespace MaliMissionRoller2
             if (_inRollMode)
                 return;
 
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.Play("Click");
             Extensions.ButtonSetGfx(RollMode, 1000036);
             Extensions.ButtonSetGfx(BrowserMode, 1000046);
             _searchBarNameInput.SetAlpha(0);

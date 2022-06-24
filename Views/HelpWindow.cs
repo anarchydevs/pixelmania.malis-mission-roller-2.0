@@ -65,6 +65,7 @@ namespace MaliMissionRoller2
 
         private void CloseClick(object sender, ButtonBase e)
         {
+            Midi.Play("Click");
             Window.Close();
         }
     }
