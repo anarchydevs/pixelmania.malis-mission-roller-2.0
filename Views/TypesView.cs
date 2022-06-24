@@ -57,7 +57,8 @@ namespace MaliMissionRoller2
 
         private void MissionTypeClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Main.Sounds.Click.Play();
+            
             bool on = (bool)e.Tag;
 
             if (!on)

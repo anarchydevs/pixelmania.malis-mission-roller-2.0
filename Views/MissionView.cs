@@ -60,7 +60,7 @@ namespace MaliMissionRoller2
 
         private void PingClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Main.Sounds.Click.Play();
 
             if (e.Tag == null)
                 return;
@@ -70,7 +70,7 @@ namespace MaliMissionRoller2
 
         private void AcceptClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Main.Sounds.Click.Play();
 
             if (e.Tag == null)
                 return;
@@ -82,7 +82,7 @@ namespace MaliMissionRoller2
         internal void AcceptMission(Identity identity, bool playSound = true)
         {
             if (playSound)
-                Extensions.PlaySound(Main.Sounds.Alert);
+                Main.Sounds.Click.Play();
 
             Network.Send(new CreateQuestMessage()
             {

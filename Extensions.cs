@@ -1,21 +1,17 @@
 ﻿using AOSharp.Common.GameData;
 using AOSharp.Common.GameData.UI;
 using AOSharp.Common.Helpers;
-using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.Interfaces;
 using AOSharp.Core;
-using AOSharp.Core.Inventory;
 using AOSharp.Core.UI;
 using Newtonsoft.Json;
-using SmokeLounge.AOtomation.Messaging.GameData;
-using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Media;
 
 namespace MaliMissionRoller2
@@ -29,9 +25,8 @@ namespace MaliMissionRoller2
             button.SetGfx(ButtonState.Pressed, gfxId);
         }
 
-        public static void PlaySound(MediaPlayer media)
+        public static void PlaySound(SoundPlayer media)
         {
-            media.Position = TimeSpan.Zero;
             media.Play();
         }
 
@@ -103,17 +98,13 @@ namespace MaliMissionRoller2
 
     public class Sounds
     {
-        public MediaPlayer Click;
-        public MediaPlayer Alert;
+        public SoundPlayer Click;
+        public SoundPlayer Alert;
 
         public Sounds()
         {
-            Click = new MediaPlayer();
-            Click.Open(new Uri($"{Main.PluginDir}\\Sound\\Click.mp3"));
-            Click.Volume = 0.5f;
-            Alert = new MediaPlayer();
-            Alert.Open(new Uri($"{Main.PluginDir}\\Sound\\Alert.mp3"));
-            Alert.Volume = 0.1f;
+           Click = new SoundPlayer($"{Main.PluginDir}\\Sound\\Click.wav");
+           Alert = new SoundPlayer($"{Main.PluginDir}\\Sound\\Alert.wav");
         }
     }
 

@@ -34,6 +34,7 @@ namespace MaliMissionRoller2
             try
             {
                 HelpWindow _helpWindow = new HelpWindow();
+
                 if (Window.FindView("HeaderRoot", out View headerRoot))
                 {
                     InSettings = false;
@@ -68,13 +69,15 @@ namespace MaliMissionRoller2
 
         private void HelpClick(object sender, ButtonBase e)
         {
+            Main.Sounds.Click.Play();
+
             HelpWindow helpWindow = new HelpWindow();
             helpWindow.Window.Show(true);
         }
 
         private void StartClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Main.Sounds.Click.Play();
 
             _isRolling = !_isRolling;
             Chat.WriteLine($"Rolling set to: {_isRolling.ToString().ToUpper()}");
@@ -82,7 +85,7 @@ namespace MaliMissionRoller2
 
         private void SettingsClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Midi.PlayMidi("Click");
 
             if (InSettings)
             {
@@ -101,7 +104,7 @@ namespace MaliMissionRoller2
 
         public void SwapViews()
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Main.Sounds.Click.Play();
 
             if (InSettings)
             {
@@ -119,7 +122,8 @@ namespace MaliMissionRoller2
 
         private void RequestClick(object sender, ButtonBase e)
         {
-            Extensions.PlaySound(Main.Sounds.Click);
+            Main.Sounds.Click.Play();
+
             SwapViews();
             RequestMission();
         }
@@ -164,7 +168,7 @@ namespace MaliMissionRoller2
 
                     if (rollEntry == null)
                     {
-                        Extensions.PlaySound(Main.Sounds.Alert);
+                        Main.Sounds.Alert.Play();
 
                         Chat.WriteLine("Remaining roll items outside characters level reach.\n" +
                             "If you think this is wrong, disable the 'Auto Adjust Level Slider'\n" +

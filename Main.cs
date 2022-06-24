@@ -32,12 +32,17 @@ namespace MaliMissionRoller2
             Mission.RollListChanged += RollListChanged;
             Network.N3MessageSent += N3Message_Sent;
             Game.TeleportEnded += Game_OnTeleportEnded;
-            //Sounds = new Sounds();
-            //Extensions.PlaySound(Sounds.Alert);
+            Sounds = new Sounds();
+
+            Midi.PlayMidi("Alert");
+
+        //    Extensions.PlaySound(Sounds.Alert);
             Chat.RegisterCommand("mmr", (string command, string[] param, ChatWindow chatWindow) => DevCmd(param));
         }
         private void DevCmd(string[] param)
         {
+
+            Chat.WriteLine(Midi.playingMidi.Count);
             if (param.Length < 2)
                 return;
 
@@ -92,6 +97,7 @@ namespace MaliMissionRoller2
 
         public override void Teardown()
         {
+            Midi.TearDown();
             Settings.Save(_window);
         }
     }
