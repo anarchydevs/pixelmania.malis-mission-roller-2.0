@@ -29,11 +29,11 @@ namespace MaliMissionRoller2
             //_window.Show();
             //_window.Window.MoveTo(Settings.Frame.X, Settings.Frame.Y);
             //Game.OnUpdate += Update;
-            Mission.RollListChanged += RollListChanged;
-            Network.N3MessageSent += N3Message_Sent;
-            Game.TeleportEnded += Game_OnTeleportEnded;
-            Sounds = new Sounds();
-            Extensions.PlaySound(Sounds.Alert);
+           // Mission.RollListChanged += RollListChanged;
+            //Network.N3MessageSent += N3Message_Sent;
+           // Game.TeleportEnded += Game_OnTeleportEnded;
+            //Sounds = new Sounds();
+            //Extensions.PlaySound(Sounds.Alert);
             Chat.RegisterCommand("mmr", (string command, string[] param, ChatWindow chatWindow) => DevCmd(param));
         }
         private void DevCmd(string[] param)
