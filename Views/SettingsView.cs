@@ -18,7 +18,7 @@ namespace MaliMissionRoller2
         public View Root;
         public ItemDisplayView ItemDisplay;
         public SlidersView Sliders;
-        public LocationView Locations;
+        public PlayfieldView Locations;
         public TypesView MissionTypes;
         public ExtrasView ExtraOptions;
         private View _settingsView;
@@ -36,7 +36,7 @@ namespace MaliMissionRoller2
                 Sliders = new SlidersView(sliderRoot);
 
             if (_settingsView.FindChild("LocationRoot", out View locationRoot))
-                Locations = new LocationView(locationRoot);
+                Locations = new PlayfieldView(locationRoot);
 
             if (_settingsView.FindChild("TypesRoot", out View typesRoot))
                 MissionTypes = new TypesView(typesRoot);

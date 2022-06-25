@@ -29,7 +29,7 @@ namespace MaliMissionRoller2
 
         public void Save(MainWindow window)
         {
-            foreach (LocationViewEntry locationEntry in window.SettingsView.Locations.Entries)
+            foreach (PlayfieldEntryView locationEntry in window.SettingsView.Locations.Entries)
                 Locations[locationEntry.Name.Text] = new LocationModel
                 {
                     State = (bool)locationEntry.Toggle.Tag,

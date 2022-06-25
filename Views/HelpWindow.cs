@@ -15,14 +15,18 @@ namespace MaliMissionRoller2
 {
     public class HelpWindow
     {
-        public Window Window;
+        public Window StartupWindow;
+        private Window _graphicalWindow;
 
         public HelpWindow()
         {
-            Window = Window.CreateFromXml("MaliMissionRollerHelp", $"{Main.PluginDir}\\UI\\Windows\\HelpWindow.xml", 
+            StartupWindow = Window.CreateFromXml("MaliMissionRollerHelp", $"{Main.PluginDir}\\UI\\Windows\\HelpWindow.xml", 
                 WindowStyle.Popup, WindowFlags.AutoScale | WindowFlags.NoFade);
 
-            if (Window.FindView("Text", out TextView textView))
+            _graphicalWindow = Window.CreateFromXml("MaliMissionRollerGraphicalHelp", $"{Main.PluginDir}\\UI\\Windows\\GraphicalHelpWindow.xml",
+                WindowStyle.Popup, WindowFlags.AutoScale | WindowFlags.NoFade);
+
+            if (StartupWindow.FindView("Text", out TextView textView))
             {
                 textView.Text = $"\n " +
                 $"- Take advantage over continuous rolls\n " +
@@ -45,28 +49,62 @@ namespace MaliMissionRoller2
                 $"               ~ Made with AOSharp\n ";
             }
 
-            if (Window.FindView("Close", out Button _close))
+            if (StartupWindow.FindView("Close", out Button _closeHelp))
             {
-                Extensions.ButtonSetGfx(_close, 1000064);
-                _close.Clicked = CloseClick;
+                Extensions.ButtonSetGfx(_closeHelp, 1000064);
+                _closeHelp.Clicked = CloseHelpClick;
             }
 
-            if (Window.FindView("Logo", out BitmapView logo))
+            if (StartupWindow.FindView("GraphicalGuide", out Button _graphicalGuide))
             {
-                logo.SetBitmap("BigLogo");
+                Extensions.ButtonSetGfx(_graphicalGuide, 1000073);
+                _graphicalGuide.Clicked = GraphicalGuideClick;
+            }
+
+            if (StartupWindow.FindView("Logo", out BitmapView _logo))
+            {
+                _logo.SetBitmap("BigLogo");
             }
 
             if (Main.Settings.Extras["StartHelp"])
             {
-                Window.MoveToCenter();
-                Window.Show(true);
+                StartupWindow.MoveToCenter();
+                StartupWindow.Show(true);
             }
         }
 
-        private void CloseClick(object sender, ButtonBase e)
+        private void GraphicalGuideClick(object sender, ButtonBase e)
         {
             Midi.Play("Click");
-            Window.Close();
+
+            _graphicalWindow = Window.CreateFromXml("MaliMissionRollerGraphicalHelp", $"{Main.PluginDir}\\UI\\Windows\\GraphicalHelpWindow.xml",
+                  WindowStyle.Popup, WindowFlags.AutoScale | WindowFlags.NoFade);
+
+            if (_graphicalWindow.FindView("Close", out Button _closeGraphical))
+            {
+                Extensions.ButtonSetGfx(_closeGraphical, 1000064);
+                _closeGraphical.Clicked = CloseGraphicalClick;
+            }
+
+            if (_graphicalWindow.FindView("Image", out BitmapView _graphical))
+            {
+                _graphical.SetBitmap("GraphicalGuide");
+            }
+
+            _graphicalWindow.MoveToCenter();
+            _graphicalWindow.Show(true);
+        }
+
+        private void CloseHelpClick(object sender, ButtonBase e)
+        {
+            Midi.Play("Click");
+            StartupWindow.Close();
+        }
+
+        private void CloseGraphicalClick(object sender, ButtonBase e)
+        {
+            Midi.Play("Click");
+            _graphicalWindow.Close();
         }
     }
 }

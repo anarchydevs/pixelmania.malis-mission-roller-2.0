@@ -72,7 +72,7 @@ namespace MaliMissionRoller2
             Midi.Play("Click");
 
             HelpWindow helpWindow = new HelpWindow();
-            helpWindow.Window.Show(true);
+            helpWindow.StartupWindow.Show(true);
         }
 
         private void StartClick(object sender, ButtonBase e)
@@ -159,25 +159,21 @@ namespace MaliMissionRoller2
 
                 var rollEntry = SettingsView.ItemDisplay.RollEntryViews
                     .FirstOrDefault(entry => MissionLvls[DynelManager.LocalPlayer.Level - 1]
-                    .Any(missionRange => entry.RollEntryModel.Ql - missionRange == 0 || new[] { "Nano Crystal", "NanoCrystal" }.Any(entry.RollEntryModel.Name.Contains) && Math.Abs(entry.RollEntryModel.Ql - missionRange) <= 10));
+                    .Any(missionRange => entry.RollEntryModel.Ql - missionRange == 0 || 
+                    new[] { "Nano Crystal", "NanoCrystal" }.Any(entry.RollEntryModel.Name.Contains) && Math.Abs(entry.RollEntryModel.Ql - missionRange) <= 10) ||
+                    entry.RollEntryModel.LowId == 297315);
 
                 if (rollEntry == null)
                 {
+                    Midi.Play("Alert");
 
-                    rollEntry = SettingsView.ItemDisplay.RollEntryViews.FirstOrDefault(x => x.RollEntryModel.LowId == 297315);
+                    Chat.WriteLine("Remaining roll items outside characters level reach.\n" +
+                        "If you think this is wrong, disable the 'Auto Adjust Level Slider'\n" +
+                        "temporarily and contact me so I can update the mission level table!\n" +
+                        "(press '?' in the top right corner for contact details)");
 
-                    if (rollEntry == null)
-                    {
-                        Midi.Play("Alert");
-
-                        Chat.WriteLine("Remaining roll items outside characters level reach.\n" +
-                            "If you think this is wrong, disable the 'Auto Adjust Level Slider'\n" +
-                            "temporarily and contact me so I can update the mission level table!\n" +
-                            "(press '?' in the top right corner for contact details)");
-
-                        _isRolling = false;
-                        return;
-                    }
+                    _isRolling = false;
+                    return;
                 }
 
                 if (rollEntry.RollEntryModel.LowId != 297315)
@@ -216,21 +212,17 @@ namespace MaliMissionRoller2
             int missionIndex = -1;
             foreach (MissionInfo missionInfo in rollList)
             {
+                missionIndex++;
                 RollEntryView rollEntry = SettingsView.ItemDisplay.RollEntryViews
                     .Where(b => missionInfo.MissionItemData.Any(a => a.HighId == b.RollEntryModel.HighId && a.Ql == b.RollEntryModel.Ql) ||
                                 missionInfo.Description.Contains(b.RollEntryModel.Name) && new[] { "Nano Crystal", "NanoCrystal" }.Any(b.RollEntryModel.Name.Contains) ||
-                                missionInfo.Description.Contains(b.RollEntryModel.Name) && b.RollEntryModel.Ql == _missionLevel)
+                                missionInfo.Description.Contains(b.RollEntryModel.Name) && b.RollEntryModel.Ql == _missionLevel ||
+                                b.RollEntryModel.LowId == 297315 && b.RollEntryModel.Ql <= MissionView.CombinedItemValue[missionIndex])
                     .FirstOrDefault();
 
-                missionIndex++;
-
                 if (rollEntry == null)
-                {
-                    rollEntry = SettingsView.ItemDisplay.RollEntryViews.FirstOrDefault(x => x.RollEntryModel.LowId == 297315);
+                    continue;
 
-                    if (rollEntry == null || rollEntry.RollEntryModel.Ql > MissionView.CombinedItemValue[missionIndex])
-                        continue;
-                }
                 if (!(bool)SettingsView.MissionTypes.ReturnItem.Tag && missionInfo.MissionIcon == 11329)
                 {
                     Chat.WriteLine($"Match found '{rollEntry.RollEntryModel.Name}', skipping due to 'Return Item' being disabled.");
@@ -257,7 +249,7 @@ namespace MaliMissionRoller2
                     continue;
                 }
 
-                LocationViewEntry locEntry = SettingsView.Locations.Entries.Where(x => (bool)x.Toggle.Tag && x.PfId == missionInfo.Playfield.Instance).FirstOrDefault();
+                PlayfieldEntryView locEntry = SettingsView.Locations.Entries.Where(x => (bool)x.Toggle.Tag && x.PfId == missionInfo.Playfield.Instance).FirstOrDefault();
 
                 if (locEntry == null)
                 {

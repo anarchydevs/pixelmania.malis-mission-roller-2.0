@@ -13,9 +13,9 @@ using System.Linq;
 
 namespace MaliMissionRoller2
 {
-    public class LocationView
+    public class PlayfieldView
     {
-        internal List<LocationViewEntry> Entries;
+        internal List<PlayfieldEntryView> Entries;
         internal View Root;
         private Bounds _bounds;
         private Button _coords;
@@ -23,13 +23,13 @@ namespace MaliMissionRoller2
         private Button _disableAll;
         private readonly int[] _pfIds = new int[] { 760, 585, 655, 550, 545, 505, 605, 800, 665, 590, 670, 595, 620, 685, 687, 717, 647, 791, 695, 625, 560, 696, 567, 566, 565, 540, 716, 705, 700, 710, 570, 630, 735, 740, 730, 610, 615, 635, 790, 795, 640, 646, 650, 600, 551, 586 };
        
-        public LocationView(View root)
+        public PlayfieldView(View root)
         {
-            Entries = new List<LocationViewEntry>();
+            Entries = new List<PlayfieldEntryView>();
             _bounds = new Bounds();
             Root = root;
 
-            View _view = View.CreateFromXml($"{Main.PluginDir}\\UI\\Views\\LocationView.xml");
+            View _view = View.CreateFromXml($"{Main.PluginDir}\\UI\\Views\\PlayfieldView.xml");
             _view.FindChild("ScrollListRoot", out View _scrollListRoot);
             _view.FindChild("Background", out BitmapView _background);
             _background.SetBitmap("LocationsBg");
@@ -47,32 +47,32 @@ namespace MaliMissionRoller2
             for (int i = 0; i < _pfIds.Length; i++)
             {
                 string pfName = Utils.UnsafePointerToString(N3InterfaceModule_t.GetPFName(_pfIds[i]));
-                LocationViewEntry locationModel = new LocationViewEntry();
-                locationModel.Root = View.CreateFromXml($"{Main.PluginDir}\\UI\\Views\\LocationEntryView.xml");
-                locationModel.Root.Tag = _pfIds[i].ToString();
-                locationModel.Root.FindChild("Background", out locationModel.Background);
-                locationModel.Background.SetBitmap("LocationPreviewBg");
-                locationModel.Root.FindChild("Toggle", out locationModel.Toggle);
-                locationModel.Toggle.Tag = Main.Settings.Locations[pfName].State;
+                PlayfieldEntryView pfEntryView = new PlayfieldEntryView();
+                pfEntryView.Root = View.CreateFromXml($"{Main.PluginDir}\\UI\\Views\\PlayfieldEntryView.xml");
+                pfEntryView.Root.Tag = _pfIds[i].ToString();
+                pfEntryView.Root.FindChild("Background", out pfEntryView.Background);
+                pfEntryView.Background.SetBitmap("LocationPreviewBg");
+                pfEntryView.Root.FindChild("Toggle", out pfEntryView.Toggle);
+                pfEntryView.Toggle.Tag = Main.Settings.Locations[pfName].State;
                 if (Main.Settings.Locations[pfName].State)
-                    Extensions.ButtonSetGfx(locationModel.Toggle, 1000036);
+                    Extensions.ButtonSetGfx(pfEntryView.Toggle, 1000036);
                 else
-                    Extensions.ButtonSetGfx(locationModel.Toggle, 1000046);
-                locationModel.Toggle.Clicked = LocationClick;
-                locationModel.Root.FindChild("Coord1", out locationModel.Coord1);
+                    Extensions.ButtonSetGfx(pfEntryView.Toggle, 1000046);
+                pfEntryView.Toggle.Clicked = LocationClick;
+                pfEntryView.Root.FindChild("Coord1", out pfEntryView.Coord1);
                 Vector2 coord1 = Main.Settings.Locations[pfName].Bounds.Coord1;
-                locationModel.Bounds = new Bounds();
-                locationModel.Bounds.Coord1 = coord1;
-                locationModel.Coord1.Text = coord1.X != 0 && coord1.Y != 0 ? coord1.ToString() : "";
-                locationModel.Root.FindChild("Coord2", out locationModel.Coord2);
+                pfEntryView.Bounds = new Bounds();
+                pfEntryView.Bounds.Coord1 = coord1;
+                pfEntryView.Coord1.Text = coord1.X != 0 && coord1.Y != 0 ? coord1.ToString() : "";
+                pfEntryView.Root.FindChild("Coord2", out pfEntryView.Coord2);
                 Vector2 coord2 = Main.Settings.Locations[pfName].Bounds.Coord2;
-                locationModel.Bounds.Coord2 = coord2;
-                locationModel.Coord2.Text = coord2.X != 0 && coord2.Y != 0 ? coord2.ToString() : "";
-                locationModel.Root.FindChild("Name", out locationModel.Name);
-                locationModel.Name.Text = pfName;
-                locationModel.PfId = _pfIds[i];
-                Entries.Add(locationModel);
-                _scrollListRoot.AddChild(locationModel.Root, false);
+                pfEntryView.Bounds.Coord2 = coord2;
+                pfEntryView.Coord2.Text = coord2.X != 0 && coord2.Y != 0 ? coord2.ToString() : "";
+                pfEntryView.Root.FindChild("Name", out pfEntryView.Name);
+                pfEntryView.Name.Text = pfName;
+                pfEntryView.PfId = _pfIds[i];
+                Entries.Add(pfEntryView);
+                _scrollListRoot.AddChild(pfEntryView.Root, false);
             }
 
             Root.AddChild(_view, false);
@@ -81,7 +81,7 @@ namespace MaliMissionRoller2
         private void DisableAllClick(object sender, ButtonBase e)
         {
             Midi.Play("Click");
-            foreach (LocationViewEntry viewEntry in Entries)
+            foreach (PlayfieldEntryView viewEntry in Entries)
             {
                 viewEntry.Toggle.Tag = false;
                 Extensions.ButtonSetGfx(viewEntry.Toggle, 1000046);
@@ -91,7 +91,7 @@ namespace MaliMissionRoller2
         private void EnableAllClick(object sender, ButtonBase e)
         {
             Midi.Play("Click");
-            foreach (LocationViewEntry viewEntry in Entries)
+            foreach (PlayfieldEntryView viewEntry in Entries)
             {
                 viewEntry.Toggle.Tag = true;
                 Extensions.ButtonSetGfx(viewEntry.Toggle, 1000036);
@@ -100,7 +100,7 @@ namespace MaliMissionRoller2
 
         internal void BoundsCheck()
         {
-            LocationViewEntry viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance && x.Coord1.Text != "" && x.Coord2.Text != "").FirstOrDefault();
+            PlayfieldEntryView viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance && x.Coord1.Text != "" && x.Coord2.Text != "").FirstOrDefault();
 
             if (viewEntry == null)
             {
@@ -134,7 +134,7 @@ namespace MaliMissionRoller2
         internal void CoordsButtonState(int state)
         {
             Vector3 playerPos = DynelManager.LocalPlayer.Position;
-            LocationViewEntry viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance).FirstOrDefault();
+            PlayfieldEntryView viewEntry = Entries.Where(x => x.PfId == Playfield.Identity.Instance).FirstOrDefault();
 
             if (viewEntry == null)
             {
@@ -251,7 +251,7 @@ namespace MaliMissionRoller2
             e.Tag = !on;
         }
     }
-    public class LocationViewEntry
+    public class PlayfieldEntryView
     {
         public View Root;
         public BitmapView Background;
