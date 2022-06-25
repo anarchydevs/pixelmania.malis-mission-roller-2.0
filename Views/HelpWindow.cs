@@ -28,7 +28,7 @@ namespace MaliMissionRoller2
 
             if (StartupWindow.FindView("Text", out TextView textView))
             {
-                textView.Text = $"\n " +
+                textView.Text = $"\n\n " +
                 $"- Take advantage over continuous rolls\n " +
                 $"- Roll with multiple clients simultaneously\n " +
                 $"- Never skip a good roll due to server lag\n " +
@@ -36,17 +36,22 @@ namespace MaliMissionRoller2
                 $"- Use the 'Auto Adjust Lvl Slider' option \n " +
                 $"  to automatically adjust the lvl slider\n " +
                 $"  inbetween rolls for full automation\n " +
-                $"- Press '?' in the UI to open this menu\n\n\n " +
+                $"- Press '?' in the UI to open this menu\n\n" +
                 $"* QUICK ITEM BROWSER GUIDE *\n " +
                 $"- You can search for items based on\n " +
                 $"  their name or modifications or both\n " +
                 $"  Use the two blue textboxes provided\n " +
                 $"  after switching to 'DB Browser'\n " +
                 $"  Textbox1 example: eye imp ref\n " +
-                $"  Textbox2 example: assa rif,tutor'\n\n\n " +
+                $"  Textbox2 example: assa rif,tutor'";
+            }
+
+            if (StartupWindow.FindView("Text2", out TextView textView2))
+            {
+                textView2.Text =$"\n"+
                 $"- For bugs / glitches / requests:\n " +
-                $"  Discord:  Pixelmania#0349\n\n\n\n "+
-                $"               ~ Made with AOSharp\n ";
+                $"  Discord:  Pixelmania#0349\n\n " +
+                $"       ~ Made with AOSharp SDK";
             }
 
             if (StartupWindow.FindView("Close", out Button _closeHelp))

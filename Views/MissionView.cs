@@ -15,6 +15,7 @@ namespace MaliMissionRoller2
         private const float _numOfMissions = 5;
         internal double ShopValue;
         internal int[] CombinedItemValue;
+
         public MissionView(View root)
         {
             _missionViews = new List<MissionModel>();
@@ -169,6 +170,7 @@ namespace MaliMissionRoller2
             }
         }
     }
+
     internal class MissionModel
     {
         public View Root;
@@ -182,6 +184,5 @@ namespace MaliMissionRoller2
         public Button Accept;
         public MultiListView MultiListView;
         public InventoryListViewItem[] MultiListViewItem = new InventoryListViewItem[6];
-
     }
 }
