@@ -31,7 +31,7 @@
 				</View>
 				<View view_layout="horizontal" min_size="Point(80,15)">
 					<Button name="ShowBounds" layout_borders="Rect(2,1,2,0)"/>
-					<TextView font="SMALL" value="Show Location Bounds" layout_borders="Rect(2,0,2,0)" color="0x00FFF1AC"/>
+					<TextView font="SMALL" value="Show Playfield Bounds" layout_borders="Rect(2,0,2,0)" color="0x00FFF1AC"/>
 					<HLayoutSpacer/>
 				</View>
 				<VLayoutSpacer/>

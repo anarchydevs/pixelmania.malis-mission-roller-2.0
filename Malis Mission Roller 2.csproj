@@ -51,7 +51,7 @@
     <Compile Include="Views\ExtrasView.cs" />
     <Compile Include="Views\HelpWindow.cs" />
     <Compile Include="Views\TypesView.cs" />
-    <Compile Include="Views\LocationView.cs" />
+    <Compile Include="Views\PlayfieldView.cs" />
     <Compile Include="Views\SliderView.cs" />
     <Compile Include="Views\SettingsView.cs" />
     <Compile Include="Views\MissionView.cs" />
@@ -213,7 +213,13 @@
     <Content Include="UI\Textures\038_EnableAllButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="UI\Views\LocationEntryView.xml">
+    <Content Include="UI\Textures\039_GraphicalGuideButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UI\Textures\040_GraphicalGuide.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UI\Views\PlayfieldEntryView.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="UI\Views\HeaderView.xml">
@@ -231,7 +237,7 @@
     <Content Include="UI\Views\MissionView.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="UI\Views\LocationView.xml">
+    <Content Include="UI\Views\PlayfieldView.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="UI\Views\ItemDisplayView.xml">
@@ -244,6 +250,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="UI\Views\SettingsView.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UI\Windows\GraphicalHelpWindow.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="UI\Windows\HelpWindow.xml">
