@@ -36,7 +36,9 @@ namespace MaliMissionRoller2
                 $"- Use the 'Auto Adjust Lvl Slider' option \n " +
                 $"  to automatically adjust the lvl slider\n " +
                 $"  inbetween rolls for full automation\n " +
-                $"- Press '?' in the UI to open this menu\n\n" +
+                $"- Press the Dev button next to 'Extras'\n " +
+                $"  for some bonus / in dev features\n " +
+                $"- Press the '?' in the UI to reopen me\n\n" +
                 $"* QUICK ITEM BROWSER GUIDE *\n " +
                 $"- You can search for items based on\n " +
                 $"  their name or modifications or both\n " +

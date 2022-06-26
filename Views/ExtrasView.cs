@@ -51,7 +51,11 @@ namespace MaliMissionRoller2
             Chat.WriteLine("\n/mmr maxitems 'number' - change maximum browser display items\n" +
                            "  (Warning, higher numbers will increase lag while searching)\n\n" +
                            "/mmr shopvalue 'number' - change shop value (for accurate reward display)\n"+
-                           "  8 - omni trade shop\n  7 - clan/neut trade shop\n  6 - omni shop\n  4 - other shops", ChatColor.Green);
+                           "  8 - omni trade shop\n  7 - clan/neut trade shop\n  6 - omni shop\n  4 - other shops\n\n" +
+                           "In order to roll for credits, type in 'credits' or 'rewards' in the DB browser\n"+
+                           "In the QL section of the item 'Reward + Item', type in your desired minimum cash reward\n" +
+                           "Roller will pickup missions with the reward + item reward being >= than the entered\n" +
+                           "NOTE: It will always prioritise picking up other items / nanos in the roll list", ChatColor.Green);
         }
 
         private void SetupChild(Button button, string settingsName)
