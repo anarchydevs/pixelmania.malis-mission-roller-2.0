@@ -27,9 +27,9 @@ namespace MaliMissionRoller2
         {
         }
 
-        public void Save(MainWindow window)
+        public void Save()
         {
-            foreach (PlayfieldEntryView locationEntry in window.SettingsView.Locations.Entries)
+            foreach (PlayfieldEntryView locationEntry in Main.Window.SettingsView.Locations.Entries)
                 Locations[locationEntry.Name.Text] = new LocationModel
                 {
                     State = (bool)locationEntry.Toggle.Tag,
@@ -40,40 +40,40 @@ namespace MaliMissionRoller2
                     }
                 };
 
-            Sliders["EasyHard"] = window.SettingsView.Sliders.EasyHard.Value;
-            Sliders["GoodBad"] = window.SettingsView.Sliders.GoodBad.Value;
-            Sliders["OrderChaos"] = window.SettingsView.Sliders.OrderChaos.Value;
-            Sliders["OpenHidden"] = window.SettingsView.Sliders.OpenHidden.Value;
-            Sliders["PhysicalMystical"] = window.SettingsView.Sliders.PhysicalMystical.Value;
-            Sliders["HeadonStealth"] = window.SettingsView.Sliders.HeadonStealth.Value;
-            Sliders["CreditsXp"] = window.SettingsView.Sliders.CreditsXp.Value;
+            Sliders["EasyHard"] = Main.Window.SettingsView.Sliders.EasyHard.Value;
+            Sliders["GoodBad"] = Main.Window.SettingsView.Sliders.GoodBad.Value;
+            Sliders["OrderChaos"] = Main.Window.SettingsView.Sliders.OrderChaos.Value;
+            Sliders["OpenHidden"] = Main.Window.SettingsView.Sliders.OpenHidden.Value;
+            Sliders["PhysicalMystical"] = Main.Window.SettingsView.Sliders.PhysicalMystical.Value;
+            Sliders["HeadonStealth"] = Main.Window.SettingsView.Sliders.HeadonStealth.Value;
+            Sliders["CreditsXp"] = Main.Window.SettingsView.Sliders.CreditsXp.Value;
 
-            Types["ReturnItem"] = (bool)window.SettingsView.MissionTypes.ReturnItem.Tag;
-            Types["KillTarget"] = (bool)window.SettingsView.MissionTypes.KillTarget.Tag;
-            Types["FindTarget"] = (bool)window.SettingsView.MissionTypes.FindTarget.Tag;
-            Types["FindItem"] = (bool)window.SettingsView.MissionTypes.FindItem.Tag;
-            Types["UseItem"] = (bool)window.SettingsView.MissionTypes.UseItem.Tag;
+            Types["ReturnItem"] = (bool)Main.Window.SettingsView.MissionTypes.ReturnItem.Tag;
+            Types["KillTarget"] = (bool)Main.Window.SettingsView.MissionTypes.KillTarget.Tag;
+            Types["FindTarget"] = (bool)Main.Window.SettingsView.MissionTypes.FindTarget.Tag;
+            Types["FindItem"] = (bool)Main.Window.SettingsView.MissionTypes.FindItem.Tag;
+            Types["UseItem"] = (bool)Main.Window.SettingsView.MissionTypes.UseItem.Tag;
 
-            Extras["PlayAlertSound"] = (bool)window.SettingsView.ExtraOptions.PlayAlertSound.Tag;
-            Extras["AutoAdjustQl"] = (bool)window.SettingsView.ExtraOptions.AutoAdjustQl.Tag;
-            Extras["RemoveRoll"] = (bool)window.SettingsView.ExtraOptions.RemoveRoll.Tag;
-            Extras["AutoAccept"] = (bool)window.SettingsView.ExtraOptions.AutoAccept.Tag;
-            Extras["ShowBounds"] = (bool)window.SettingsView.ExtraOptions.ShowBounds.Tag;
+            Extras["PlayAlertSound"] = (bool)Main.Window.SettingsView.ExtraOptions.PlayAlertSound.Tag;
+            Extras["AutoAdjustQl"] = (bool)Main.Window.SettingsView.ExtraOptions.AutoAdjustQl.Tag;
+            Extras["RemoveRoll"] = (bool)Main.Window.SettingsView.ExtraOptions.RemoveRoll.Tag;
+            Extras["AutoAccept"] = (bool)Main.Window.SettingsView.ExtraOptions.AutoAccept.Tag;
+            Extras["ShowBounds"] = (bool)Main.Window.SettingsView.ExtraOptions.ShowBounds.Tag;
             Extras["StartHelp"] = false;
 
 
-            Database["Implants"] = (bool)window.SettingsView.ItemDisplay.Implants.Tag;
-            Database["Clusters"] = (bool)window.SettingsView.ItemDisplay.Clusters.Tag;
-            Database["Nanos"] = (bool)window.SettingsView.ItemDisplay.Nanos.Tag;
-            Database["Rest"] = (bool)window.SettingsView.ItemDisplay.Rest.Tag;
+            Database["Implants"] = (bool)Main.Window.SettingsView.ItemDisplay.Implants.Tag;
+            Database["Clusters"] = (bool)Main.Window.SettingsView.ItemDisplay.Clusters.Tag;
+            Database["Nanos"] = (bool)Main.Window.SettingsView.ItemDisplay.Nanos.Tag;
+            Database["Rest"] = (bool)Main.Window.SettingsView.ItemDisplay.Rest.Tag;
 
 
-            Frame.X = window.Window.GetFrame().MinX;
-            Frame.Y = window.Window.GetFrame().MinY;
+            Frame.X = Main.Window.Window.GetFrame().MinX;
+            Frame.Y = Main.Window.Window.GetFrame().MinY;
 
             File.WriteAllText($"{Main.PluginDir}\\JSON\\Settings.json", JsonConvert.SerializeObject(this));
 
-            List<RollEntryViewModel> rollModels = window.SettingsView.ItemDisplay.RollEntryViews.Select(x => x.RollEntryModel).ToList();
+            List<RollEntryViewModel> rollModels = Main.Window.SettingsView.ItemDisplay.RollEntryViews.Select(x => x.RollEntryModel).ToList();
             File.WriteAllText($"{Main.PluginDir}\\JSON\\RollList.json", JsonConvert.SerializeObject(rollModels));
         }
     }

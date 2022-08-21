@@ -263,6 +263,7 @@ namespace MaliMissionRoller2
                 }
 
                 SettingsView.ItemDisplay.UpdateRollEntry(rollEntry, (bool)SettingsView.ExtraOptions.RemoveRoll.Tag);
+                Main.Settings.Save();
 
                 if ((bool)SettingsView.ExtraOptions.AutoAccept.Tag)
                 {
