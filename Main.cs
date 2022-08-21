@@ -13,7 +13,7 @@ namespace MaliMissionRoller2
     public class Main : AOPluginEntry
     {
         public static string PluginDir;
-        private MainWindow _window;
+        public static MainWindow Window;
         public static Settings Settings;
         public static List<KeyValuePair<ItemInfo, List<Stat>>> ItemDb;
 
@@ -25,9 +25,9 @@ namespace MaliMissionRoller2
             Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText($"{pluginDir}\\JSON\\Settings.json"));
             Extensions.FormatItemDb(Settings.Database["Implants"], Settings.Database["Clusters"], Settings.Database["Nanos"], Settings.Database["Rest"]);
             
-            _window = new MainWindow("MaliMissionRoller", $"{pluginDir}\\UI\\Windows\\MainWindow.xml");
-            _window.Show();
-            _window.Window.MoveTo(Settings.Frame.X, Settings.Frame.Y);
+            Window = new MainWindow("MaliMissionRoller", $"{pluginDir}\\UI\\Windows\\MainWindow.xml");
+            Window.Show();
+            Window.Window.MoveTo(Settings.Frame.X, Settings.Frame.Y);
            
             Game.OnUpdate += Update;
             Mission.RollListChanged += RollListChanged;
@@ -52,8 +52,8 @@ namespace MaliMissionRoller2
             {
                 case "maxitems":
                     Settings.Dev["MaxItems"] = result;
-                    _window.SettingsView.ItemDisplay.DeleteBrowserEntries();
-                    _window.SettingsView.ItemDisplay.FormatBrowserEntries();
+                    Window.SettingsView.ItemDisplay.DeleteBrowserEntries();
+                    Window.SettingsView.ItemDisplay.FormatBrowserEntries();
                     Chat.WriteLine($"Max Display items set to: {Settings.Dev["MaxItems"]}",ChatColor.Red);
                     break;
                 case "shopvalue":
@@ -65,7 +65,7 @@ namespace MaliMissionRoller2
 
         private void Game_OnTeleportEnded(object sender, EventArgs e)
         {
-            _window.SettingsView.Locations.BoundsCheck();
+            Window.SettingsView.Locations.BoundsCheck();
         }
 
         private void N3Message_Sent(object sender, N3Message n3Msg)
@@ -78,24 +78,24 @@ namespace MaliMissionRoller2
                 return;
 
             MainWindow.CurrentTerminal = new MissionTerminal(DynelManager.GetDynel(((GenericCmdMessage)n3Msg).Target));
-            _window.MissionView.ShopValue = Math.Round(Settings.Dev["ShopValue"] * (1 + (float)DynelManager.LocalPlayer.GetStat(Stat.ComputerLiteracy) / (40 * 100)) / 100, 3);
-            _window.SwapViews();
+            Window.MissionView.ShopValue = Math.Round(Settings.Dev["ShopValue"] * (1 + (float)DynelManager.LocalPlayer.GetStat(Stat.ComputerLiteracy) / (40 * 100)) / 100, 3);
+            Window.SwapViews();
         }
 
         private void RollListChanged(object sender, RollListChangedArgs rollListChanged)
         {
-            _window.RollMatchCheck(rollListChanged.MissionDetails);
+            Window.RollMatchCheck(rollListChanged.MissionDetails);
         }
 
         private void Update(object sender, float e)
         {
-            _window.Update(e);
+            Window.Update(e);
         }
 
         public override void Teardown()
         {
             Midi.TearDown();
-            Settings.Save(_window);
+            Settings.Save();
         }
     }
 }

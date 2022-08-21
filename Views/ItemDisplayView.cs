@@ -170,17 +170,17 @@ namespace MaliMissionRoller2
         {
             Midi.Play("Click");
             RollEntryView rollEntryView = (RollEntryView)e.Tag;
-
             rollEntryView.RollEntryModel.Count += 1;
             rollEntryView.Count.Text = $"{rollEntryView.RollEntryModel.Count.ToString().PadLeft(2, '0')}";
+            Main.Settings.Save();
         }
 
         private void RollEntryMinusClick(object sender, ButtonBase e)
         {
             Midi.Play("Click");
             RollEntryView rollEntryView = (RollEntryView)e.Tag;
-
             UpdateRollEntry(rollEntryView);
+            Main.Settings.Save();
         }
 
         internal void UpdateRollEntry(RollEntryView rollEntryView, bool updateView = true)
@@ -193,7 +193,9 @@ namespace MaliMissionRoller2
             if (rollEntryView.RollEntryModel.Count == 0)
             {
                 RollEntryViews.Remove(rollEntryView);
-                _scrollListRoot.RemoveChild(rollEntryView.Root);
+                if (_inRollMode)
+                    _scrollListRoot.RemoveChild(rollEntryView.Root);
+                //  _cachedDisplayItems -= 1;
             }
             else
             {
@@ -377,6 +379,7 @@ namespace MaliMissionRoller2
                 rollListEntry.Count.Text = $"{rollListEntry.RollEntryModel.Count.ToString().PadLeft(2, '0')}";
             }
 
+            Main.Settings.Save();
             _scrollListRoot.FitToContents();
         }
 
