@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AOSharp.Core.UI;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -27,7 +28,7 @@ namespace MaliMissionRoller2
 
             Thread stoppingThread = new Thread(() => 
             {
-                StartAndStopMidiWithDelay($"{Main.PluginDir}\\Sound\\{fileName}.wav", alias);
+                StartAndStopMidiWithDelay($"\"{Main.PluginDir}\\Sound\\{fileName}.wav\"", alias);
             });
 
             stoppingThread.Start();
