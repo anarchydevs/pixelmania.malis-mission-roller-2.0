@@ -287,7 +287,7 @@ namespace MaliMissionRoller2
         }
         public bool Contains(Vector3 point)
         {
-            return point.X >= Coord1.X && point.X <= Coord2.X;
+            return point.X >= Coord1.X && point.X <= Coord2.X && point.Z >= Coord1.Y && point.Z <= Coord2.Y;
         }
     }
 }
