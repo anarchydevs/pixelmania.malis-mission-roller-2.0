@@ -249,6 +249,7 @@ namespace MaliMissionRoller2
                 Extensions.ButtonSetGfx((Button)e, 1000046);
 
             e.Tag = !on;
+            Main.Settings.Save();
         }
     }
     public class PlayfieldEntryView
