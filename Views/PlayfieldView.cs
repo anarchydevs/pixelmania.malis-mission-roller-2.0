@@ -160,7 +160,7 @@ namespace MaliMissionRoller2
                         viewEntry.Bounds.Coord2 = _bounds.Coord2;
                         viewEntry.Coord1.Text = _bounds.Coord1.ToString();
                         viewEntry.Coord2.Text = _bounds.Coord2.ToString();
-
+                        Main.Settings.Save();
                         Chat.WriteLine($"Coordinate roll bounds for {Playfield.Name} set.\nfrom: {_bounds.Coord1} to: {_bounds.Coord2}\n" +
                             $"Warning: This will limit the roller search area for {Playfield.Name}");
                     }
