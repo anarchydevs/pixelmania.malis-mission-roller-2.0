@@ -51,15 +51,22 @@ namespace MaliMissionRoller2
 
         internal MissionSliders GetSliderValues()
         {
+            var goodBad = GoodBad.Value == 0 ? -1 : GoodBad.Value;
+            var orderChaos = OrderChaos.Value == 0 ? -1 : OrderChaos.Value;
+            var openHidden = OpenHidden.Value == 0 ? -1 : OpenHidden.Value;
+            var physicalMystical = PhysicalMystical.Value == 0 ? -1 : PhysicalMystical.Value;
+            var headonStealth = HeadonStealth.Value == 0 ? -1 : HeadonStealth.Value;
+            var creditsXp = CreditsXp.Value == 0 ? -1 : CreditsXp.Value;
+
             return new MissionSliders
             {
                 Difficulty = (byte)EasyHard.Value,
-                GoodBad = unchecked((byte)GoodBad.Value),
-                OrderChaos = unchecked((byte)OrderChaos.Value),
-                OpenHidden = unchecked((byte)OpenHidden.Value),
-                PhysicalMystical = unchecked((byte)PhysicalMystical.Value),
-                HeadonStealth = unchecked((byte)HeadonStealth.Value),
-                CreditsXp = unchecked((byte)CreditsXp.Value)
+                GoodBad = unchecked((byte)goodBad),
+                OrderChaos = unchecked((byte)orderChaos),
+                OpenHidden = unchecked((byte)openHidden),
+                PhysicalMystical = unchecked((byte)physicalMystical),
+                HeadonStealth = unchecked((byte)headonStealth),
+                CreditsXp = unchecked((byte)creditsXp)
             };
 
         }
