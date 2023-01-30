@@ -4,7 +4,7 @@
 		<BitmapView name="Background">
 			<TextView layout_borders="Rect(0,3,0,0)" font="BOLD" value="- SLIDERS -" feature_flags="TVF_RENDER_SHADOW" color="0x00FFF1AC"/>
 			<View view_layout="horizontal">
-				<View h_alignment="RIGHT" min_size="Point(50,90)" max_size="Point(50,90)">
+				<View h_alignment="RIGHT" min_size="Point(51,90)" max_size="Point(51,90)">
 					<TextView font="SMALL" value="Easy " color="0x00FFF1AC"/>
 					<TextView font="SMALL" value="Good " color="0x00FFF1AC"/>
 					<TextView font="SMALL" value="Order " color="0x00FFF1AC"/>
