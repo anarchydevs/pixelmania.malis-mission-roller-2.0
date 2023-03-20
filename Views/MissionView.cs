@@ -108,9 +108,9 @@ namespace MaliMissionRoller2
 
         internal void Update(MissionInfo[] rollList)
         {
-            CombinedItemValue = new int[5];
+            CombinedItemValue = new int[rollList.Length];
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < rollList.Length; i++)
             {
                 MissionItemData[] itemData = rollList[i].MissionItemData;
 
