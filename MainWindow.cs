@@ -206,18 +206,21 @@ namespace MaliMissionRoller2
                 sliders.CreditsXp
                 );
         }
-        internal void RollMatchCheck(MissionInfo[] rollList)
+        internal void RollMatchCheck(MissionInfo[] missionList)
         {
-            MissionView.Update(rollList);
+            MissionView.Update(missionList);
             int missionIndex = -1;
-            foreach (MissionInfo missionInfo in rollList)
+
+            foreach (MissionInfo missionInfo in missionList)
             {
                 missionIndex++;
                 RollEntryView rollEntry = SettingsView.ItemDisplay.RollEntryViews
-                    .Where(b => missionInfo.MissionItemData.Any(a => a.HighId == b.RollEntryModel.HighId && a.Ql == b.RollEntryModel.Ql) ||
-                                missionInfo.Description.Contains(b.RollEntryModel.Name) && new[] { "Nano Crystal", "NanoCrystal" }.Any(b.RollEntryModel.Name.Contains) ||
-                                missionInfo.Description.Contains(b.RollEntryModel.Name) && b.RollEntryModel.Ql == _missionLevel ||
-                                b.RollEntryModel.LowId == 297315 && b.RollEntryModel.Ql <= MissionView.CombinedItemValue[missionIndex])
+                    .Where(rollList => missionInfo.MissionItemData.Any(missionEntry => 
+                                missionEntry.HighId == rollList.RollEntryModel.HighId && missionEntry.Ql == rollList.RollEntryModel.Ql ||
+                                rollList.RollEntryModel.LowId == missionEntry.LowId && missionEntry.LowId == missionEntry.HighId && missionEntry.Ql == rollList.RollEntryModel.Ql) ||
+                                missionInfo.Description.Contains(rollList.RollEntryModel.Name) && new[] { "Nano Crystal", "NanoCrystal" }.Any(rollList.RollEntryModel.Name.Contains) ||
+                                missionInfo.Description.Contains(rollList.RollEntryModel.Name) && rollList.RollEntryModel.Ql == _missionLevel ||
+                                rollList.RollEntryModel.LowId == 297315 && rollList.RollEntryModel.Ql <= MissionView.CombinedItemValue[missionIndex])
                     .FirstOrDefault();
 
                 if (rollEntry == null)
