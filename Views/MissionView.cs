@@ -112,7 +112,7 @@ namespace MaliMissionRoller2
 
             for (int i = 0; i < rollList.Length; i++)
             {
-                MissionItemData[] itemData = rollList[i].MissionItemData;
+                MissionItemReward[] itemData = rollList[i].MissionItemData;
 
                 _missionViews[i].Icon.SetBitmap(rollList[i].MissionIcon.ToString());
                 _missionViews[i].Title.Text = rollList[i].Title.Length > 25 ? rollList[i].Title.Substring(0, 25).ToUpper() : rollList[i].Title.ToUpper();
