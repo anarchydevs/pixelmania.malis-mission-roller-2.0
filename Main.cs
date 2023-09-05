@@ -22,7 +22,9 @@ namespace MaliMissionRoller2
             Chat.WriteLine("- Mali's Mission Roller 2.0 -", ChatColor.Gold);
 
             PluginDir = pluginDir;
-            Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText($"{pluginDir}\\JSON\\Settings.json"));
+
+            string fileName = File.Exists($"{pluginDir}\\JSON\\Settings.json") ? "" : "Default_";
+            Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText($"{pluginDir}\\JSON\\{fileName}Settings.json"));
             Extensions.FormatItemDb(Settings.Database["Implants"], Settings.Database["Clusters"], Settings.Database["Nanos"], Settings.Database["Rest"]);
             
             Window = new MainWindow("MaliMissionRoller", $"{pluginDir}\\UI\\Windows\\MainWindow.xml");
@@ -33,13 +35,14 @@ namespace MaliMissionRoller2
             Mission.RollListChanged += RollListChanged;
             Network.N3MessageSent += N3Message_Sent;
             Game.TeleportEnded += Game_OnTeleportEnded;
+            Game.TeleportStarted += Game_OnTeleportStarted;
 
             Midi.Play("Alert");
             Chat.RegisterCommand("mmr", (string command, string[] param, ChatWindow chatWindow) => DevCmd(param));
         }
+
         private void DevCmd(string[] param)
         {
-
             if (param.Length < 2)
                 return;
 
@@ -63,6 +66,12 @@ namespace MaliMissionRoller2
             }
         }
 
+        private void Game_OnTeleportStarted(object sender, EventArgs e)
+        {
+            MainWindow.CurrentTerminal = null;
+            Window.MissionView.Hide();
+        }
+
         private void Game_OnTeleportEnded(object sender, EventArgs e)
         {
             Window.SettingsView.Locations.BoundsCheck();
@@ -78,7 +87,7 @@ namespace MaliMissionRoller2
                 return;
 
             MainWindow.CurrentTerminal = new MissionTerminal(DynelManager.GetDynel(((GenericCmdMessage)n3Msg).Target));
-            Window.MissionView.ShopValue = Math.Round(Settings.Dev["ShopValue"] * (1 + (float)DynelManager.LocalPlayer.GetStat(Stat.ComputerLiteracy) / (40 * 100)) / 100, 3);
+            Window.MissionView.ShopValue = Math.Round(Settings.Dev["ShopValue"] * (1 + (float)DynelManager.LocalPlayer.GetStat(AOSharp.Common.GameData.Stat.ComputerLiteracy) / (40 * 100)) / 100, 3);
             Window.SwapViews();
         }
 

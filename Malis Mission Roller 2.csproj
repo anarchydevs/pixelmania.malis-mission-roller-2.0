@@ -45,6 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Stat.cs" />
     <Compile Include="Midi.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Views\ItemDisplayView.cs" />
@@ -78,10 +79,7 @@
     <None Include="JSON\MissionLevels.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="JSON\Settings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="JSON\RollList.json">
+    <None Include="JSON\Default_Settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="JSON\ItemDb_Clusters.json">
@@ -263,4 +261,8 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

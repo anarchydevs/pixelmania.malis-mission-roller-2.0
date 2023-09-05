@@ -687,5 +687,56 @@
   "MaxNCU": [
     "max",
     "ncu"
+  ],
+  "Unknown": [
+    "unknown"
+  ],
+  "Soldier": [
+    "soldier"
+  ],
+  "MartialArtist": [
+    "martial",
+    "artist"
+  ],
+  "Engineer": [
+    "engineer"
+  ],
+  "Fixer": [
+    "fixer"
+  ],
+  "Agent": [
+    "agent"
+  ],
+  "Adventurer": [
+    "adventurer"
+  ],
+  "Trader": [
+    "trader"
+  ],
+  "Bureaucrat": [
+    "bureaucrat"
+  ],
+  "Enforcer": [
+    "enforcer"
+  ],
+  "Doctor": [
+    "doctor"
+  ],
+  "NanoTechnician": [
+    "nano",
+    "technician"
+  ],
+  "Metaphysicist": [
+    "meta",
+    "physicist"
+  ],
+  "Monster": [
+    "monster"
+  ],
+  "Keeper": [
+    "keeper"
+  ],
+  "Shade": [
+    "shade"
   ]
 }

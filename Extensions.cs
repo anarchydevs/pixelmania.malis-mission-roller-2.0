@@ -43,7 +43,7 @@ namespace MaliMissionRoller2
             IntPtr pEngine = N3Engine_t.GetInstance();
             Identity none = Identity.None;
             IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, itemIdentity, ref none);
-            return DummyItem_t.GetStat(pItem, Stat.Value, 4);
+            return DummyItem_t.GetStat(pItem, AOSharp.Common.GameData.Stat.Value, 4);
         }
 
         public static unsafe string GetItemName(int lowId, int highId, int ql)

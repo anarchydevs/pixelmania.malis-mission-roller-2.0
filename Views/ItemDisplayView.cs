@@ -78,7 +78,11 @@ namespace MaliMissionRoller2
             //pregenerated views for browser entries
             FormatBrowserEntries();
             //loading saved rolllist
-            List<RollEntryViewModel> rollList = JsonConvert.DeserializeObject<List<RollEntryViewModel>>(File.ReadAllText($"{Main.PluginDir}\\JSON\\RollList.json"));
+
+            List<RollEntryViewModel> rollList = new List<RollEntryViewModel>();   
+        
+            if (File.Exists($"{Main.PluginDir}\\JSON\\RollList.json"))
+                rollList = JsonConvert.DeserializeObject<List<RollEntryViewModel>>(File.ReadAllText($"{Main.PluginDir}\\JSON\\RollList.json"));
 
             if (rollList != null)
             foreach (RollEntryViewModel rollEntry in rollList)
